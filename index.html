@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Tracker · Snov.io</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#f5f4f8;
+  --surface:#ffffff;
+  --surface2:#f0eef6;
+  --border:#e8e4f0;
+  --border2:#d8d2ec;
+  --purple:#7B4FD4;
+  --purple-dark:#5c35b0;
+  --purple-light:#9b6fe4;
+  --purple-bg:rgba(123,79,212,0.07);
+  --purple-bg2:rgba(123,79,212,0.12);
+  --text:#1a1625;
+  --muted:#9189aa;
+  --muted2:#c4bdd8;
+  --green:#22c55e;
+  --red:#ef4444;
+}
+
+body{background:var(--bg);color:var(--text);font-family:'Nunito Sans',sans-serif;height:100vh;overflow:hidden;font-size:13px;}
+
+/* ─── Shell ─── */
+.shell{display:flex;height:100vh;}
+
+/* ─── Sidebar ─── */
+.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;}
+.sb-logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.sb-logo-text{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.4px;}
+.sb-logo-text span{color:var(--purple);}
+.sb-logo-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.sb-scroll{flex:1;overflow-y:auto;padding:14px 10px;}
+.sb-scroll::-webkit-scrollbar{width:0;}
+.sb-section{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;padding:0 10px;margin:14px 0 5px;}
+.sb-nav{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:11px;color:var(--muted);transition:all .12s;}
+.sb-nav:hover{background:var(--surface2);color:var(--text);}
+.sb-nav.active{background:var(--purple-bg);color:var(--purple);font-weight:600;}
+.sb-nav-left{display:flex;align-items:center;gap:7px;}
+.sb-count{font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);}
+.sb-nav.active .sb-count{background:var(--purple-bg2);color:var(--purple);}
+.sb-bottom{padding:14px 16px;border-top:1px solid var(--border);}
+.sb-stat-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.sb-stat-val{font-size:24px;font-weight:800;color:var(--purple);letter-spacing:-.5px;}
+.sb-stat-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* ─── Main ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ─── Topbar ─── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.crumb{font-size:11px;color:var(--muted);}
+.crumb b{color:var(--text);}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.search{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Nunito Sans',sans-serif;font-size:11px;padding:7px 12px;border-radius:7px;width:200px;outline:none;}
+.search:focus{border-color:var(--purple-light);}
+.search::placeholder{color:var(--muted2);}
+.btn{padding:7px 14px;border-radius:7px;font-family:'Nunito Sans',sans-serif;font-size:11px;cursor:pointer;border:none;font-weight:600;transition:all .12s;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--purple-light);color:var(--purple);}
+.btn-primary{background:var(--purple);color:#fff;}
+.btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
+
+/* ─── Stats strip ─── */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.stat-box{padding:14px 20px;border-right:1px solid var(--border);}
+.stat-box:last-child{border-right:none;}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.stat-val{font-size:22px;font-weight:800;letter-spacing:-.5px;}
+.stat-val.purple{color:var(--purple);}
+.stat-val.dark{color:var(--text);}
+.stat-val.muted{color:var(--muted2);}
+.stat-val.green{color:var(--green);}
+.stat-sub{font-size:9px;color:var(--muted2);margin-top:2px;}
+
+/* ─── Filters ─── */
+.filters-bar{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;background:var(--surface);flex-shrink:0;}
+.filter-pill{font-size:10px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .12s;font-weight:500;}
+.filter-pill:hover{border-color:var(--purple-light);color:var(--purple);}
+.filter-pill.active{background:var(--purple);border-color:var(--purple);color:#fff;}
+.filters-right{margin-left:auto;display:flex;gap:6px;}
+
+/* ─── Content ─── */
+.content{flex:1;overflow-y:auto;padding:20px 24px;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ─── Ticket card ─── */
+.ticket-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:all .15s;cursor:pointer;}
+.ticket-card:hover{border-color:var(--purple-light);box-shadow:0 2px 12px rgba(123,79,212,0.08);}
+.ticket-card.resolved{opacity:.55;}
+.ticket-card.resolved:hover{opacity:.7;}
+
+.tc-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .12s;cursor:pointer;}
+.tc-check:hover{border-color:var(--purple);}
+.tc-check.done{background:var(--purple);border-color:var(--purple);color:#fff;}
+
+.tc-body{flex:1;min-width:0;}
+.tc-id{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);margin-bottom:4px;}
+.tc-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.tc-title.done{text-decoration:line-through;color:var(--muted);}
+.tc-links{display:flex;gap:5px;flex-wrap:wrap;}
+.tc-link{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:9px;padding:3px 9px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);text-decoration:none;transition:all .12s;}
+.tc-link:hover{background:var(--purple-bg);border-color:var(--purple-light);color:var(--purple);}
+.tc-link.no-link{opacity:.35;cursor:default;pointer-events:none;}
+
+.tc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.status-badge{font-size:9px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;font-family:'DM Mono',monospace;letter-spacing:.3px;}
+.status-open{background:rgba(123,79,212,0.1);color:var(--purple);border:1px solid rgba(123,79,212,0.2);}
+.status-done{background:#f0fdf4;color:var(--green);border:1px solid #bbf7d0;}
+.days-counter{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted2);display:flex;align-items:center;gap:3px;}
+.days-counter b{color:var(--purple);font-size:12px;}
+.days-counter.urgent b{color:var(--red);}
+.tc-date{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);}
+
+/* ─── Empty state ─── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-icon{font-size:40px;margin-bottom:14px;opacity:.4;}
+.empty-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.empty-sub{font-size:11px;color:var(--muted2);}
+
+/* ─── Modal ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,22,37,0.4);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:480px;max-width:95vw;box-shadow:0 20px 60px rgba(123,79,212,0.15);}
+.modal-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px;letter-spacing:-.3px;}
+.modal-sub{font-size:11px;color:var(--muted);margin-bottom:22px;}
+.modal-close{float:right;font-size:20px;color:var(--muted2);cursor:pointer;line-height:1;margin-top:-2px;}
+.modal-close:hover{color:var(--text);}
+.field{margin-bottom:14px;}
+.field-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.field-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Nunito Sans',sans-serif;font-size:12px;padding:9px 12px;border-radius:7px;width:100%;outline:none;transition:border-color .12s;}
+.field-input:focus{border-color:var(--purple-light);}
+.field-input::placeholder{color:var(--muted2);}
+.modal-footer{display:flex;gap:8px;margin-top:20px;}
+.modal-footer .btn{flex:1;padding:10px;font-size:12px;}
+
+/* ─── Animations ─── */
+@keyframes slideIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.ticket-card{animation:slideIn .25s ease;}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">qa<span>.</span>tracker</div>
+      <div class="sb-logo-sub">Snov.io · QA Team</div>
+    </div>
+    <div class="sb-scroll">
+      <div class="sb-section">Visualizar</div>
+      <div class="sb-nav active" onclick="setFilter('all')">
+        <div class="sb-nav-left"><span>◈</span> Todos</div>
+        <span class="sb-count" id="count-all">0</span>
+      </div>
+      <div class="sb-nav" onclick="setFilter('open')">
+        <div class="sb-nav-left"><span>○</span> Abertos</div>
+        <span class="sb-count" id="count-open">0</span>
+      </div>
+      <div class="sb-nav" onclick="setFilter('resolved')">
+        <div class="sb-nav-left"><span>✓</span> Resolvidos</div>
+        <span class="sb-count" id="count-resolved">0</span>
+      </div>
+      <div class="sb-nav" onclick="setFilter('urgent')">
+        <div class="sb-nav-left"><span>⚠</span> Urgentes (+7d)</div>
+        <span class="sb-count" id="count-urgent">0</span>
+      </div>
+    </div>
+    <div class="sb-bottom">
+      <div class="sb-stat-label">Abertos agora</div>
+      <div class="sb-stat-val" id="sb-open-count">0</div>
+      <div class="sb-stat-sub">tickets aguardando QA</div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="main">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="crumb">QA Tracker &rsaquo; <b id="crumb-label">Todos os Tickets</b></div>
+      </div>
+      <div class="topbar-right">
+        <input class="search" placeholder="Buscar ticket..." oninput="searchTickets(this.value)">
+        <button class="btn btn-ghost" onclick="exportCSV()">↓ CSV</button>
+        <button class="btn btn-primary" onclick="openModal()">+ Novo Ticket</button>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-box"><div class="stat-lbl">Total</div><div class="stat-val dark" id="stat-total">0</div><div class="stat-sub">tickets criados</div></div>
+      <div class="stat-box"><div class="stat-lbl">Abertos</div><div class="stat-val purple" id="stat-open">0</div><div class="stat-sub">aguardando</div></div>
+      <div class="stat-box"><div class="stat-lbl">Resolvidos</div><div class="stat-val green" id="stat-resolved">0</div><div class="stat-sub">concluídos</div></div>
+      <div class="stat-box"><div class="stat-lbl">Média de dias</div><div class="stat-val dark" id="stat-avg">—</div><div class="stat-sub">por ticket aberto</div></div>
+    </div>
+
+    <div class="filters-bar">
+      <div class="filter-pill active" id="fp-all" onclick="setFilter('all')">Todos</div>
+      <div class="filter-pill" id="fp-open" onclick="setFilter('open')">Abertos</div>
+      <div class="filter-pill" id="fp-resolved" onclick="setFilter('resolved')">Resolvidos</div>
+      <div class="filter-pill" id="fp-urgent" onclick="setFilter('urgent')">Urgentes</div>
+    </div>
+
+    <div class="content" id="ticket-list">
+      <!-- tickets rendered here -->
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <span class="modal-close" onclick="closeModal()">×</span>
+    <div class="modal-title" id="modal-title">Novo Ticket</div>
+    <div class="modal-sub">Preencha os detalhes do ticket de QA</div>
+
+    <input type="hidden" id="edit-id">
+
+    <div class="field">
+      <label class="field-label">Título do ticket *</label>
+      <input class="field-input" id="f-title" placeholder="Ex: Formulário não valida email duplicado">
+    </div>
+    <div class="field">
+      <label class="field-label">Link da Task</label>
+      <input class="field-input" id="f-task" placeholder="https://...">
+    </div>
+    <div class="field">
+      <label class="field-label">Link do Google Chat</label>
+      <input class="field-input" id="f-chat" placeholder="https://chat.google.com/...">
+    </div>
+    <div class="field">
+      <label class="field-label">Link do Ticket</label>
+      <input class="field-input" id="f-ticket" placeholder="https://...">
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveTicket()">Salvar Ticket</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'snovio_qa_tickets_v1';
+
+// ── Sample data ──
+const SAMPLE = [
+  {id:'QA-001',title:'Formulário de cadastro não valida email duplicado',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'https://jira.atlassian.com',createdAt:'2026-03-03',resolved:false},
+  {id:'QA-002',title:'Botão de cancelamento some no mobile iOS 16+',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'',createdAt:'2026-03-01',resolved:false},
+  {id:'QA-003',title:'Dashboard carrega lento com 500+ leads na listagem',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'https://jira.atlassian.com',createdAt:'2026-03-07',resolved:false},
+  {id:'QA-004',title:'Exportação CSV com caracteres especiais quebrados',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'https://jira.atlassian.com',createdAt:'2026-02-24',resolved:true},
+  {id:'QA-005',title:'Erro 500 no endpoint de autenticação OAuth',taskUrl:'https://linear.app',chatUrl:'',ticketUrl:'',createdAt:'2026-02-17',resolved:true},
+];
+
+// ── State ──
+let tickets = [];
+let currentFilter = 'all';
+let searchQuery = '';
+let editingId = null;
+
+// ── Storage ──
+function load(){
+  try{
+    const stored = localStorage.getItem(STORAGE_KEY);
+    tickets = stored ? JSON.parse(stored) : SAMPLE;
+  }catch{tickets = SAMPLE;}
+}
+function save(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(tickets));}catch{}
+}
+
+// ── Utils ──
+function daysSince(dateStr){
+  const created = new Date(dateStr);
+  const now = new Date();
+  const diff = Math.floor((now - created) / (1000*60*60*24));
+  return diff;
+}
+function formatDate(dateStr){
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+}
+function nextId(){
+  const nums = tickets.map(t=>parseInt(t.id.replace('QA-',''))||0);
+  const max = nums.length ? Math.max(...nums) : 0;
+  return 'QA-'+ String(max+1).padStart(3,'0');
+}
+
+// ── Filter ──
+function setFilter(f){
+  currentFilter = f;
+  // sidebar
+  document.querySelectorAll('.sb-nav').forEach(n=>n.classList.remove('active'));
+  const idx = {all:0,open:1,resolved:2,urgent:3}[f];
+  document.querySelectorAll('.sb-nav')[idx]?.classList.add('active');
+  // pills
+  ['all','open','resolved','urgent'].forEach(k=>{
+    document.getElementById('fp-'+k)?.classList.toggle('active', k===f);
+  });
+  // crumb
+  const labels = {all:'Todos os Tickets',open:'Abertos',resolved:'Resolvidos',urgent:'Urgentes (+7 dias)'};
+  document.getElementById('crumb-label').textContent = labels[f];
+  render();
+}
+
+function searchTickets(q){
+  searchQuery = q.toLowerCase();
+  render();
+}
+
+// ── Render ──
+function getFiltered(){
+  let list = [...tickets];
+  if(currentFilter==='open') list = list.filter(t=>!t.resolved);
+  else if(currentFilter==='resolved') list = list.filter(t=>t.resolved);
+  else if(currentFilter==='urgent') list = list.filter(t=>!t.resolved && daysSince(t.createdAt)>=7);
+  if(searchQuery) list = list.filter(t=>t.title.toLowerCase().includes(searchQuery)||t.id.toLowerCase().includes(searchQuery));
+  return list;
+}
+
+function render(){
+  updateStats();
+  const list = getFiltered();
+  const el = document.getElementById('ticket-list');
+
+  if(!list.length){
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Nenhum ticket encontrado</div><div class="empty-sub">Adicione um novo ticket com o botão acima.</div></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(t=>{
+    const days = daysSince(t.createdAt);
+    const urgent = days >= 7 && !t.resolved;
+    return `
+    <div class="ticket-card ${t.resolved?'resolved':''}" id="tc-${t.id}">
+      <div class="tc-check ${t.resolved?'done':''}" onclick="toggleResolve('${t.id}')">
+        ${t.resolved?'✓':''}
+      </div>
+      <div class="tc-body">
+        <div class="tc-id">#${t.id} · criado em ${formatDate(t.createdAt)}</div>
+        <div class="tc-title ${t.resolved?'done':''}">${t.title}</div>
+        <div class="tc-links">
+          ${t.taskUrl ? `<a class="tc-link" href="${t.taskUrl}" target="_blank">🔗 Task</a>` : `<span class="tc-link no-link">🔗 Task</span>`}
+          ${t.chatUrl ? `<a class="tc-link" href="${t.chatUrl}" target="_blank">💬 Google Chat</a>` : `<span class="tc-link no-link">💬 Google Chat</span>`}
+          ${t.ticketUrl ? `<a class="tc-link" href="${t.ticketUrl}" target="_blank">📋 Ticket</a>` : `<span class="tc-link no-link">📋 Ticket</span>`}
+          <span class="tc-link" onclick="editTicket('${t.id}')" style="cursor:pointer;margin-left:4px">✏️ Editar</span>
+          <span class="tc-link" onclick="deleteTicket('${t.id}')" style="cursor:pointer;color:#ef4444">🗑 Deletar</span>
+        </div>
+      </div>
+      <div class="tc-right">
+        <span class="status-badge ${t.resolved?'status-done':'status-open'}">${t.resolved?'✓ Resolvido':'● Aberto'}</span>
+        <div class="days-counter ${urgent?'urgent':''}">
+          <b>${days}</b> ${days===1?'dia':'dias'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats(){
+  const open = tickets.filter(t=>!t.resolved);
+  const resolved = tickets.filter(t=>t.resolved);
+  const urgent = open.filter(t=>daysSince(t.createdAt)>=7);
+  const avgDays = open.length ? (open.reduce((s,t)=>s+daysSince(t.createdAt),0)/open.length).toFixed(1) : '—';
+
+  document.getElementById('stat-total').textContent = tickets.length;
+  document.getElementById('stat-open').textContent = open.length;
+  document.getElementById('stat-resolved').textContent = resolved.length;
+  document.getElementById('stat-avg').textContent = avgDays;
+
+  document.getElementById('count-all').textContent = tickets.length;
+  document.getElementById('count-open').textContent = open.length;
+  document.getElementById('count-resolved').textContent = resolved.length;
+  document.getElementById('count-urgent').textContent = urgent.length;
+  document.getElementById('sb-open-count').textContent = open.length;
+}
+
+// ── Actions ──
+function toggleResolve(id){
+  const t = tickets.find(x=>x.id===id);
+  if(t){t.resolved=!t.resolved; save(); render();}
+}
+
+function editTicket(id){
+  const t = tickets.find(x=>x.id===id);
+  if(!t) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Editar Ticket';
+  document.getElementById('edit-id').value = id;
+  document.getElementById('f-title').value = t.title;
+  document.getElementById('f-task').value = t.taskUrl||'';
+  document.getElementById('f-chat').value = t.chatUrl||'';
+  document.getElementById('f-ticket').value = t.ticketUrl||'';
+  openModal();
+}
+
+function deleteTicket(id){
+  if(!confirm('Deletar este ticket?')) return;
+  tickets = tickets.filter(t=>t.id!==id);
+  save(); render();
+}
+
+function saveTicket(){
+  const title = document.getElementById('f-title').value.trim();
+  if(!title){document.getElementById('f-title').focus();return;}
+
+  if(editingId){
+    const t = tickets.find(x=>x.id===editingId);
+    if(t){
+      t.title = title;
+      t.taskUrl = document.getElementById('f-task').value.trim();
+      t.chatUrl = document.getElementById('f-chat').value.trim();
+      t.ticketUrl = document.getElementById('f-ticket').value.trim();
+    }
+  } else {
+    tickets.unshift({
+      id: nextId(),
+      title,
+      taskUrl: document.getElementById('f-task').value.trim(),
+      chatUrl: document.getElementById('f-chat').value.trim(),
+      ticketUrl: document.getElementById('f-ticket').value.trim(),
+      createdAt: new Date().toISOString().split('T')[0],
+      resolved: false
+    });
+  }
+  save(); closeModal(); render();
+}
+
+function exportCSV(){
+  const rows = [['ID','Título','Task','Google Chat','Ticket','Criado em','Dias','Status']];
+  tickets.forEach(t=>{
+    rows.push([t.id,`"${t.title}"`,t.taskUrl,t.chatUrl,t.ticketUrl,t.createdAt,daysSince(t.createdAt),t.resolved?'Resolvido':'Aberto']);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'qa-tickets-snovio.csv';
+  a.click();
+}
+
+// ── Modal ──
+function openModal(){
+  if(!editingId){
+    document.getElementById('modal-title').textContent = 'Novo Ticket';
+    document.getElementById('f-title').value='';
+    document.getElementById('f-task').value='';
+    document.getElementById('f-chat').value='';
+    document.getElementById('f-ticket').value='';
+  }
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('f-title').focus(),100);
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  editingId = null;
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('modal')) closeModal();
+}
+
+// ── Keyboard ──
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeModal();
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openModal();}
+});
+
+// ── Init ──
+load();
+render();
+</script>
+</body>
+</html>
