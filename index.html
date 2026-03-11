@@ -3,239 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snov.io Growth OS</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>QA Tracker · Snov.io</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#090c10;
-  --surface:#0f1318;
-  --surface2:#141820;
-  --surface3:#1a1f2a;
-  --border:rgba(255,255,255,0.07);
-  --accent:#00e5a0;
-  --accent2:#ff5757;
-  --accent3:#5b8fff;
-  --accent4:#f0c040;
-  --accent5:#ff9d3d;
-  --text:#dde3ee;
-  --muted:#5a6478;
-  --muted2:#8896ac;
-  --green:#00e5a0;
-  --red:#ff5757;
-  --blue:#5b8fff;
-  --amber:#f0c040;
-}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;font-size:13px;}
+:root{
+  --bg:#f5f4f8;--surface:#fff;--surface2:#f0eef6;--border:#e8e4f0;--border2:#d8d2ec;
+  --purple:#7B4FD4;--purple-dark:#5c35b0;--purple-bg:rgba(123,79,212,0.07);--purple-bg2:rgba(123,79,212,0.12);
+  --text:#1a1625;--muted:#9189aa;--muted2:#c4bdd8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Nunito Sans',sans-serif;height:100vh;overflow:hidden;font-size:13px;}
+.shell{display:flex;height:100vh;}
 
-body::before{content:'';position:fixed;top:-40%;left:-20%;width:80vw;height:80vh;background:radial-gradient(ellipse,rgba(0,229,160,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;}
-body::after{content:'';position:fixed;bottom:-30%;right:-20%;width:70vw;height:70vh;background:radial-gradient(ellipse,rgba(91,143,255,0.05) 0%,transparent 70%);pointer-events:none;z-index:0;}
+/* SIDEBAR */
+.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.sb-logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.sb-logo-text{font-size:17px;font-weight:800;letter-spacing:-.4px;}
+.sb-logo-text span{color:var(--purple);}
+.sb-logo-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.sb-scroll{flex:1;overflow-y:auto;padding:14px 10px;}
+.sb-scroll::-webkit-scrollbar{width:0;}
+.sb-section{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;padding:0 10px;margin:14px 0 5px;}
+.sb-nav,.sb-pri{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:11px;color:var(--muted);transition:all .12s;margin-bottom:2px;}
+.sb-nav:hover,.sb-pri:hover{background:var(--surface2);color:var(--text);}
+.sb-nav.active,.sb-pri.active{background:var(--purple-bg);color:var(--purple);font-weight:600;}
+.sb-left{display:flex;align-items:center;gap:7px;}
+.sb-cnt{font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);}
+.sb-nav.active .sb-cnt,.sb-pri.active .sb-cnt{background:var(--purple-bg2);color:var(--purple);}
+.pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-bottom{padding:14px 16px;border-top:1px solid var(--border);}
+.sb-stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.sb-stat-val{font-size:24px;font-weight:800;color:var(--purple);letter-spacing:-.5px;}
+.sb-stat-sub{font-size:10px;color:var(--muted);margin-top:2px;}
 
-.shell{display:flex;height:100vh;overflow:hidden;position:relative;z-index:1;}
-
-/* ─── Sidebar ─── */
-.sidebar{width:230px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
-.sidebar-logo{padding:24px 22px 20px;border-bottom:1px solid var(--border);}
-.logo-text{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:var(--text);}
-.logo-text span{color:var(--accent);}
-.logo-tag{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
-
-.sidebar-scroll{flex:1;overflow-y:auto;padding:14px 10px;}
-.sidebar-scroll::-webkit-scrollbar{width:0;}
-.nav-section{margin-bottom:22px;}
-.nav-section-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:0 12px;margin-bottom:6px;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:11px;color:var(--muted2);transition:all .15s;position:relative;}
-.nav-item:hover{background:var(--surface2);color:var(--text);}
-.nav-item.active{background:rgba(0,229,160,0.1);color:var(--accent);}
-.nav-item.active::before{content:'';position:absolute;left:0;top:20%;height:60%;width:2px;background:var(--accent);border-radius:0 2px 2px 0;}
-.nav-icon{width:16px;text-align:center;font-size:13px;}
-.badge-count{margin-left:auto;font-size:9px;background:var(--red);color:#fff;padding:2px 6px;border-radius:20px;}
-.badge-new{margin-left:auto;font-size:9px;background:rgba(0,229,160,0.15);color:var(--accent);padding:2px 6px;border-radius:20px;}
-
-.sidebar-bottom{padding:16px 16px;border-top:1px solid var(--border);}
-.sidebar-stat-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
-.sidebar-stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--red);}
-.sidebar-stat-sub{font-size:10px;color:var(--muted);margin-top:2px;}
-
-/* ─── Main ─── */
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.topbar-left{display:flex;align-items:center;gap:14px;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .crumb{font-size:11px;color:var(--muted);}
 .crumb b{color:var(--text);}
-.period-sel{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:6px;cursor:pointer;}
-.topbar-right{display:flex;align-items:center;gap:8px;}
-.search-box{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:6px 12px;border-radius:6px;width:190px;outline:none;}
-.search-box:focus{border-color:rgba(255,255,255,0.2);}
-.btn{padding:7px 15px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;border:none;transition:all .15s;letter-spacing:.3px;}
-.btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--muted2);}
-.btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,0.15);}
-.btn-accent{background:var(--accent);color:#090c10;font-weight:500;}
-.btn-accent:hover{background:#00fbb5;transform:translateY(-1px);}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.search{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Nunito Sans',sans-serif;font-size:11px;padding:7px 12px;border-radius:7px;width:200px;outline:none;}
+.search:focus{border-color:rgba(123,79,212,0.4);}
+.search::placeholder{color:var(--muted2);}
+.btn{padding:7px 14px;border-radius:7px;font-family:'Nunito Sans',sans-serif;font-size:11px;cursor:pointer;border:none;font-weight:700;transition:all .12s;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted);}
+.btn-ghost:hover{border-color:rgba(123,79,212,0.3);color:var(--purple);}
+.btn-primary{background:var(--purple);color:#fff;}
+.btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
 
-.content{flex:1;overflow-y:auto;padding:28px;}
-.content::-webkit-scrollbar{width:5px;}
-.content::-webkit-scrollbar-track{background:transparent;}
-.content::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:3px;}
+/* STATS */
+.stats-strip{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.stat-box{padding:12px 18px;border-right:1px solid var(--border);}
+.stat-box:last-child{border-right:none;}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.stat-val{font-size:20px;font-weight:800;letter-spacing:-.5px;}
+.sv-dark{color:var(--text);}
+.sv-purple{color:var(--purple);}
+.sv-green{color:#16a34a;}
+.sv-red{color:#dc2626;}
 
-/* ─── Pages ─── */
-.page{display:none;}
-.page.active{display:block;animation:fadeUp .35s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* FILTERS */
+.filters-bar{padding:10px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;background:var(--surface);flex-shrink:0;flex-wrap:wrap;}
+.fp{font-size:10px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .12s;font-weight:500;}
+.fp:hover{border-color:rgba(123,79,212,0.3);color:var(--purple);}
+.fp.active{background:var(--purple);border-color:var(--purple);color:#fff;}
 
-/* ─── Page header ─── */
-.page-header{margin-bottom:24px;}
-.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
-.page-title span{color:var(--accent);}
-.page-sub{font-size:11px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:8px;}
-.live-dot{display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:20px 24px;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
-/* ─── KPI strip ─── */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
-.kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .15s;}
-.kpi-box:hover{border-color:rgba(255,255,255,0.14);transform:translateY(-2px);}
-.kpi-box::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0;}
-.kpi-box.green::after{background:var(--accent);}
-.kpi-box.red::after{background:var(--red);}
-.kpi-box.blue::after{background:var(--blue);}
-.kpi-box.amber::after{background:var(--amber);}
-.kpi-box.orange::after{background:var(--accent5);}
-.kpi-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-.kpi-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1;margin-bottom:5px;}
-.kpi-val.green{color:var(--accent);}
-.kpi-val.red{color:var(--red);}
-.kpi-val.blue{color:var(--blue);}
-.kpi-val.amber{color:var(--amber);}
-.kpi-val.orange{color:var(--accent5);}
-.kpi-meta{font-size:10px;color:var(--muted);}
-.kpi-meta b{color:var(--muted2);}
+/* TICKET */
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:all .15s;animation:fu .2s ease;}
+.tc:hover{border-color:var(--border2);box-shadow:0 2px 12px rgba(123,79,212,0.06);}
+.tc.resolved{opacity:.5;}
+@keyframes fu{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* ─── Grids ─── */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
-.grid-31{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
-.grid-13{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px;}
+.tc-chk{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .12s;cursor:pointer;}
+.tc-chk:hover{border-color:var(--purple);}
+.tc-chk.done{background:var(--purple);border-color:var(--purple);color:#fff;}
 
-/* ─── Card ─── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;}
-.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
-.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
-.card-sub{font-size:10px;color:var(--muted);margin-top:2px;}
-.chip{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:500;letter-spacing:.5px;white-space:nowrap;}
-.chip-green{background:rgba(0,229,160,0.12);color:var(--accent);}
-.chip-red{background:rgba(255,87,87,0.12);color:var(--red);}
-.chip-blue{background:rgba(91,143,255,0.12);color:var(--blue);}
-.chip-amber{background:rgba(240,192,64,0.12);color:var(--amber);}
+.tc-body{flex:1;min-width:0;}
+.tc-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap;}
+.tc-id{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);}
+.tc-rep{font-size:10px;color:var(--muted);}
+.tc-rep b{color:var(--text);font-weight:600;}
+.tc-date{font-size:9px;color:var(--muted2);}
 
-/* ─── Bar chart ─── */
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.bar-lbl{font-size:10px;color:var(--muted2);width:150px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bar-track{flex:1;background:var(--surface2);border-radius:3px;height:24px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 9px;font-size:10px;font-weight:500;color:#090c10;transition:width .8s cubic-bezier(.4,0,.2,1);}
-.bar-fill.light{color:var(--muted2);}
-.bar-pct{font-size:10px;color:var(--muted);width:30px;text-align:right;flex-shrink:0;}
+.priority{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;}
+.p-critical{background:#fdf2f8;color:#9d174d;border:1px solid #fbcfe8;}
+.p-high{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;}
+.p-medium{background:#fffbeb;color:#b45309;border:1px solid #fde68a;}
+.p-low{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;}
 
-/* ─── Divider ─── */
-.divider{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin:20px 0 14px;display:flex;align-items:center;gap:10px;}
-.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.tc-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.tc-title.done{text-decoration:line-through;color:var(--muted);}
+.tc-links{display:flex;gap:5px;flex-wrap:wrap;}
+.tc-lnk{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:9px;padding:3px 9px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);text-decoration:none;cursor:pointer;transition:all .12s;}
+.tc-lnk:hover{background:var(--purple-bg);border-color:rgba(123,79,212,0.3);color:var(--purple);}
+.tc-lnk.off{opacity:.3;pointer-events:none;}
 
-/* ─── Segment pills ─── */
-.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
-.pill{font-size:9px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.5px;text-transform:uppercase;}
-.pill:hover,.pill.active{background:rgba(0,229,160,0.08);border-color:var(--accent);color:var(--accent);}
+.tc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.sbadge{font-size:9px;font-weight:600;padding:3px 10px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.3px;}
+.s-open{background:var(--purple-bg2);color:var(--purple);border:1px solid rgba(123,79,212,0.2);}
+.s-done{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;}
+.dpill{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.d-green{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;}
+.d-yellow{background:#fffbeb;color:#b45309;border:1px solid #fde68a;}
+.d-red{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;}
+.d-neutral{background:var(--surface2);color:var(--muted2);border:1px solid var(--border);}
 
-/* ─── Month chart ─── */
-.month-chart{display:flex;align-items:flex-end;gap:8px;height:80px;}
-.mc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.mc-bar{width:100%;border-radius:4px 4px 0 0;}
-.mc-label{font-size:9px;color:var(--muted);}
-.mc-val{font-size:9px;color:var(--muted2);}
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.3;}
+.empty-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:5px;}
+.empty-sub{font-size:11px;color:var(--muted2);}
 
-/* ─── Info rows ─── */
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:11px;}
-.info-row:last-child{border-bottom:none;}
-.info-row .lbl{color:var(--muted);}
-.info-row .val{font-weight:500;}
-.info-row .val.up{color:var(--accent);}
-.info-row .val.down{color:var(--red);}
-.info-row .val.neutral{color:var(--blue);}
-
-/* ─── Playbook cards ─── */
-.playbook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
-.pb-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
-.pb-card:hover{border-color:rgba(255,255,255,0.15);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
-.pb-card.done{opacity:.55;}
-.pb-card.done::after{content:'✓ DONE';position:absolute;top:10px;right:10px;font-size:8px;background:rgba(0,229,160,0.15);color:var(--accent);padding:2px 8px;border-radius:20px;letter-spacing:1px;}
-.pb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.pb-company{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.pb-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;}
-.pb-company-name{font-size:10px;color:var(--muted);}
-.pb-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:7px;line-height:1.3;}
-.pb-body{font-size:10px;color:var(--muted2);line-height:1.6;margin-bottom:10px;}
-.pb-impact{font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px;}
-.pb-impact b{color:var(--accent);}
-
-/* ─── Task list ─── */
-.task-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:background .1s;border-radius:4px;}
-.task-item:last-child{border-bottom:none;}
-.task-item:hover{background:rgba(255,255,255,0.02);padding-left:6px;margin-left:-6px;}
-.task-check{width:17px;height:17px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .12s;font-size:9px;}
-.task-check.checked{background:var(--accent);border-color:var(--accent);color:#090c10;}
-.task-body{flex:1;}
-.task-title{font-size:11px;color:var(--text);line-height:1.5;}
-.task-title.done{text-decoration:line-through;color:var(--muted);}
-.task-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;}
-.task-tag{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);}
-.task-priority{font-size:9px;padding:2px 7px;border-radius:20px;}
-.task-priority.high{background:rgba(255,87,87,0.12);color:var(--red);}
-.task-priority.medium{background:rgba(240,192,64,0.12);color:var(--amber);}
-.task-priority.low{background:rgba(0,229,160,0.12);color:var(--accent);}
-.task-source{font-size:9px;color:var(--muted);font-style:italic;}
-
-/* ─── Insights ─── */
-.insight-card{border-left:2px solid transparent;padding:14px 16px;border-radius:8px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-left-width:2px;}
-.insight-card.red{border-left-color:var(--red);}
-.insight-card.green{border-left-color:var(--accent);}
-.insight-card.blue{border-left-color:var(--blue);}
-.insight-card.amber{border-left-color:var(--amber);}
-.insight-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.insight-icon{font-size:16px;}
-.insight-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;}
-.insight-card.red .insight-title{color:var(--red);}
-.insight-card.green .insight-title{color:var(--accent);}
-.insight-card.blue .insight-title{color:var(--blue);}
-.insight-card.amber .insight-title{color:var(--amber);}
-.insight-body{font-size:11px;color:var(--muted2);line-height:1.6;}
-.insight-body b{color:var(--text);}
-.insight-cta{display:inline-block;margin-top:8px;font-size:10px;color:var(--blue);cursor:pointer;text-decoration:underline;}
-
-/* ─── Benchmark table ─── */
-.bench-table{width:100%;border-collapse:collapse;}
-.bench-table th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;}
-.bench-table td{padding:9px 10px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.03);}
-.bench-table tr:hover td{background:rgba(255,255,255,0.02);}
-.bench-table tr.snov td{background:rgba(240,192,64,0.06);}
-.s-good{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(0,229,160,0.12);color:var(--accent);}
-.s-warn{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(240,192,64,0.12);color:var(--amber);}
-.s-bad{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(255,87,87,0.12);color:var(--red);}
-
-/* ─── Upload ─── */
-.upload-zone{border:2px dashed var(--border);border-radius:8px;padding:28px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface);}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(0,229,160,0.03);}
-.upload-zone input{display:none;}
-
-/* ─── Modal ─── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:28px;max-width:480px;width:90%;}
-.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
-.modal-sub{font-size:11px;color:var(--muted);margin-bottom:20px;}
-.modal-close{float:right;cursor:pointer;font-size:20px;color:var(--muted);line-height:1;}
-.modal-input{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:10px 12px;border-radius:6px;width:100%;outline:none;margin-bottom:10px;}
-.modal-input:focus{border-color:var(--accent);}
-canvas{display:block;}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(26,22,37,0.35);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:500px;max-width:95vw;box-shadow:0 20px 60px rgba(123,79,212,0.12);}
+.modal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.3px;}
+.modal-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.modal-x{font-size:22px;color:var(--muted2);cursor:pointer;line-height:1;}
+.modal-x:hover{color:var(--text);}
+.field{margin-bottom:13px;}
+.flbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;display:block;}
+.finput{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Nunito Sans',sans-serif;font-size:12px;padding:9px 12px;border-radius:7px;width:100%;outline:none;transition:border-color .12s;}
+.finput:focus{border-color:rgba(123,79,212,0.4);}
+.finput::placeholder{color:var(--muted2);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-foot{display:flex;gap:8px;margin-top:20px;}
+.modal-foot .btn{flex:1;padding:10px;font-size:12px;}
 </style>
 </head>
 <body><script>
@@ -245,14 +145,14 @@ canvas{display:block;}
   if(sessionStorage.getItem(KEY) === '1') return;
   var overlay = document.createElement('div');
   overlay.id = 'auth-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:#090c10;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:DM Mono,monospace;';
+  overlay.style.cssText = 'position:fixed;inset:0;background:#f5f4f8;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Nunito Sans,sans-serif;';
   overlay.innerHTML = `
-    <div style="background:#0f1318;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:40px 36px;width:340px;text-align:center;">
-      <div style="font-size:22px;font-weight:800;color:#dde3ee;margin-bottom:6px;font-family:Syne,sans-serif;">QA Tracker</div>
-      <div style="font-size:10px;color:#3a4050;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;">Acesso restrito · Snov.io</div>
-      <input id="auth-input" type="password" placeholder="Digite a senha..." style="background:#141820;border:1px solid rgba(255,255,255,0.07);color:#dde3ee;font-family:DM Mono,monospace;font-size:12px;padding:10px 14px;border-radius:7px;width:100%;outline:none;margin-bottom:12px;box-sizing:border-box;">
-      <div id="auth-error" style="font-size:10px;color:#ff5757;margin-bottom:10px;min-height:16px;"></div>
-      <button id="auth-btn" style="background:#7B4FD4;color:#fff;font-family:DM Mono,monospace;font-size:12px;font-weight:700;padding:10px;border-radius:7px;width:100%;border:none;cursor:pointer;">Entrar</button>
+    <div style="background:#ffffff;border:1px solid #e8e4f0;border-radius:12px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(123,79,212,0.1);">
+      <div style="font-size:22px;font-weight:800;color:#1a1625;margin-bottom:6px;">QA Tracker</div>
+      <div style="font-size:10px;color:#c4bdd8;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;">Acesso restrito · Snov.io</div>
+      <input id="auth-input" type="password" placeholder="Digite a senha..." style="background:#f0eef6;border:1px solid #e8e4f0;color:#1a1625;font-family:DM Mono,monospace;font-size:12px;padding:10px 14px;border-radius:7px;width:100%;outline:none;margin-bottom:12px;box-sizing:border-box;">
+      <div id="auth-error" style="font-size:10px;color:#ef4444;margin-bottom:10px;min-height:16px;"></div>
+      <button id="auth-btn" style="background:#7B4FD4;color:#fff;font-family:Nunito Sans,sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:7px;width:100%;border:none;cursor:pointer;">Entrar</button>
     </div>`;
   document.body.appendChild(overlay);
   function tryLogin(){
@@ -267,980 +167,252 @@ canvas{display:block;}
 </script>
 <div class="shell">
 
-<!-- ═══ SIDEBAR ═══ -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-text">snov<span>.</span>io</div>
-    <div class="logo-tag">Growth OS · Data Team</div>
-  </div>
-  <div class="sidebar-scroll">
-    <div class="nav-section">
-      <div class="nav-section-label">Analytics</div>
-      <div class="nav-item active" data-page="overview"><span class="nav-icon">◈</span>Overview</div>
-      <div class="nav-item" data-page="churn"><span class="nav-icon">⟁</span>Churn Analysis<span class="badge-count">570</span></div>
-      <div class="nav-item" data-page="benchmark"><span class="nav-icon">◎</span>Benchmarks Globais</div>
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">qa<span>.</span>tracker</div>
+      <div class="sb-logo-sub">Snov.io · QA Team</div>
     </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Playbooks</div>
-      <div class="nav-item" data-page="playbooks"><span class="nav-icon">▣</span>Top 10 Táticas<span class="badge-new">NEW</span></div>
-      <div class="nav-item" data-page="tasks"><span class="nav-icon">☐</span>Plano de Ação</div>
+    <div class="sb-scroll">
+      <div class="sb-section">Visualizar</div>
+      <div class="sb-nav active" onclick="sf('all')"><div class="sb-left"><span>◈</span>Todos</div><span class="sb-cnt" id="c-all">0</span></div>
+      <div class="sb-nav" onclick="sf('open')"><div class="sb-left"><span>○</span>Abertos</div><span class="sb-cnt" id="c-open">0</span></div>
+      <div class="sb-nav" onclick="sf('resolved')"><div class="sb-left"><span>✓</span>Resolvidos</div><span class="sb-cnt" id="c-resolved">0</span></div>
+      <div class="sb-nav" onclick="sf('urgent')"><div class="sb-left"><span>⚠</span>Urgentes +7d</div><span class="sb-cnt" id="c-urgent">0</span></div>
+      <div class="sb-section">Prioridade</div>
+      <div class="sb-pri" onclick="sf('critical')"><div class="sb-left"><div class="pdot" style="background:#9d174d"></div>Critical</div><span class="sb-cnt" id="c-critical">0</span></div>
+      <div class="sb-pri" onclick="sf('high')"><div class="sb-left"><div class="pdot" style="background:#dc2626"></div>High</div><span class="sb-cnt" id="c-high">0</span></div>
+      <div class="sb-pri" onclick="sf('medium')"><div class="sb-left"><div class="pdot" style="background:#b45309"></div>Medium</div><span class="sb-cnt" id="c-medium">0</span></div>
+      <div class="sb-pri" onclick="sf('low')"><div class="sb-left"><div class="pdot" style="background:#16a34a"></div>Low</div><span class="sb-cnt" id="c-low">0</span></div>
     </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Insights</div>
-      <div class="nav-item" data-page="alertas"><span class="nav-icon">⚠</span>Alertas<span class="badge-count">3</span></div>
-      <div class="nav-item" data-page="risco"><span class="nav-icon">◎</span>Perfil de Risco</div>
-      <div class="nav-item" data-page="recomendacoes"><span class="nav-icon">✦</span>Recomendações</div>
+    <div class="sb-bottom">
+      <div class="sb-stat-lbl">Abertos agora</div>
+      <div class="sb-stat-val" id="sb-val">0</div>
+      <div class="sb-stat-sub">tickets aguardando QA</div>
     </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Dados</div>
-      <div class="nav-item" data-page="upload"><span class="nav-icon">↑</span>Importar CSV</div>
-      <div class="nav-item" data-page="insights"><span class="nav-icon">◉</span>AI Insights</div>
-    </div>
-  </div>
-  <div class="sidebar-bottom">
-    <div class="sidebar-stat-label">Total Cancelamentos</div>
-    <div class="sidebar-stat-val">570</div>
-    <div class="sidebar-stat-sub">Dez/25 → Mar/26</div>
-  </div>
-</aside>
+  </aside>
 
-<!-- ═══ MAIN ═══ -->
-<div class="main">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="crumb">Snov.io Growth OS &rsaquo; <b id="crumb-text">Overview</b></div>
-      <select class="period-sel">
-        <option>Dez/25 – Mar/26</option>
-        <option>Últimos 3 meses</option>
-        <option>Este ano</option>
-      </select>
-    </div>
-    <div class="topbar-right">
-      <input class="search-box" placeholder="Buscar plano, motivo...">
-      <button class="btn btn-ghost" onclick="exportData()">↓ Exportar</button>
-      <button class="btn btn-accent" onclick="showModal()">+ Nova Ação</button>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- ════ OVERVIEW ════ -->
-    <div class="page active" id="page-overview">
-      <div class="page-header">
-        <div class="page-title">Growth <span>Overview</span></div>
-        <div class="page-sub"><span class="live-dot"></span>570 cancelamentos reais · Dez/25–Mar/26 · Baseado em Slack, Notion, Figma, HubSpot, Stripe</div>
-      </div>
-
-      <div class="pills">
-        <div class="pill active" onclick="setPill(this)">Todos os planos</div>
-        <div class="pill" onclick="setPill(this)">Starter S</div>
-        <div class="pill" onclick="setPill(this)">Pro M</div>
-        <div class="pill" onclick="setPill(this)">Pro L/XL</div>
-        <div class="pill" onclick="setPill(this)">Team Owners</div>
-        <div class="pill" onclick="setPill(this)">Com LIA</div>
-      </div>
-
-      <div class="kpi-strip">
-        <div class="kpi-box red"><div class="kpi-label">Cancelamentos</div><div class="kpi-val red">570</div><div class="kpi-meta">Últimos <b>4 meses</b></div></div>
-        <div class="kpi-box amber"><div class="kpi-label">Plano dominante</div><div class="kpi-val amber" style="font-size:20px;padding-top:5px">Starter S</div><div class="kpi-meta"><b>69%</b> dos churns</div></div>
-        <div class="kpi-box blue"><div class="kpi-label">Recuperáveis</div><div class="kpi-val blue">225</div><div class="kpi-meta">Pausa + Win-back + Budget</div></div>
-        <div class="kpi-box green"><div class="kpi-label">Mês mais crítico</div><div class="kpi-val green" style="font-size:20px;padding-top:5px">Jan/26</div><div class="kpi-meta"><b>189</b> cancelamentos</div></div>
-      </div>
-
-      <div class="grid-31">
-        <div class="card">
-          <div class="card-header">
-            <div><div class="card-title">Motivos de Cancelamento</div><div class="card-sub">570 registros reais do seu CSV</div></div>
-            <span class="chip chip-red">Dados reais</span>
-          </div>
-          <div id="reasons-bars"></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Por Mês</div><div class="card-sub">Volume de saídas</div></div></div>
-          <div class="month-chart" id="month-chart"></div>
-          <div style="margin-top:12px">
-            <div class="info-row"><span class="lbl">Pico Jan/26</span><span class="val down">189</span></div>
-            <div class="info-row"><span class="lbl">Média mensal</span><span class="val">~143</span></div>
-            <div class="info-row"><span class="lbl">Mar/26 (parcial)</span><span class="val neutral">79</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Planos no Churn</div><div class="card-sub">Distribuição real</div></div><span class="chip chip-amber">8 planos</span></div>
-          <div id="plans-bars"></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Engajamento pré-churn</div><div class="card-sub">Pedidos antes de cancelar</div></div></div>
-          <canvas id="engagementDonut" height="160"></canvas>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;text-align:center">
-            <div style="background:rgba(255,87,87,0.1);border-radius:6px;padding:8px"><div style="font-family:'Syne',sans-serif;font-size:18px;color:var(--red)">43%</div><div style="font-size:9px;color:var(--muted)">1–3 pedidos</div></div>
-            <div style="background:rgba(240,192,64,0.1);border-radius:6px;padding:8px"><div style="font-family:'Syne',sans-serif;font-size:18px;color:var(--amber)">29%</div><div style="font-size:9px;color:var(--muted)">4–10 pedidos</div></div>
-            <div style="background:rgba(0,229,160,0.1);border-radius:6px;padding:8px"><div style="font-family:'Syne',sans-serif;font-size:18px;color:var(--accent)">28%</div><div style="font-size:9px;color:var(--muted)">10+ pedidos</div></div>
-          </div>
-        </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">QA Tracker &rsaquo; <b id="crumb">Todos os Tickets</b></div>
+      <div class="topbar-right">
+        <input class="search" placeholder="Buscar ticket..." oninput="sq(this.value)">
+        <button class="btn btn-ghost" onclick="exportCSV()">↓ CSV</button>
+        <button class="btn btn-primary" onclick="openModal()">+ Novo Ticket</button>
       </div>
     </div>
 
-    <!-- ════ CHURN ════ -->
-    <div class="page" id="page-churn">
-      <div class="page-header">
-        <div class="page-title">Churn <span>Deep Dive</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Análise detalhada · 570 cancelamentos reais</div>
-      </div>
-      <div class="kpi-strip">
-        <div class="kpi-box red"><div class="kpi-label">Starter S</div><div class="kpi-val red">395</div><div class="kpi-meta">69% do churn total</div></div>
-        <div class="kpi-box amber"><div class="kpi-label">Pro M</div><div class="kpi-val amber">122</div><div class="kpi-meta">21% do churn</div></div>
-        <div class="kpi-box blue"><div class="kpi-label">Team Owners</div><div class="kpi-val blue">99</div><div class="kpi-meta">17% são líderes de time</div></div>
-        <div class="kpi-box green"><div class="kpi-label">Com LIA ativo</div><div class="kpi-val green">64</div><div class="kpi-meta">11% usavam LinkedIn Auto</div></div>
-      </div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="card-header">
-          <div><div class="card-title">Heatmap de Risco por Plano</div><div class="card-sub">Volume × impacto × ação recomendada</div></div>
-          <span class="chip chip-red">Ação imediata</span>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="bench-table">
-            <thead><tr><th>Plano</th><th>Cancelamentos</th><th>% Total</th><th>Team Owners</th><th>Com LIA</th><th>Risco</th><th>Ação</th></tr></thead>
-            <tbody>
-              <tr><td><b>Starter S</b></td><td>395</td><td>69%</td><td>~12%</td><td>~8%</td><td><span class="s-bad">CRÍTICO</span></td><td style="color:var(--muted2)">Reformular onboarding · early win triggers</td></tr>
-              <tr><td><b>Pro M</b></td><td>122</td><td>21%</td><td>~22%</td><td>~14%</td><td><span class="s-warn">ALTO</span></td><td style="color:var(--muted2)">CS proativo 30d · upsell para L</td></tr>
-              <tr><td><b>Pro L</b></td><td>22</td><td>4%</td><td>~35%</td><td>~20%</td><td><span class="s-warn">MÉDIO</span></td><td style="color:var(--muted2)">Win-back campaign · custom deal</td></tr>
-              <tr><td><b>Pro S (3M)</b></td><td>15</td><td>3%</td><td>~18%</td><td>~12%</td><td><span class="s-warn">MÉDIO</span></td><td style="color:var(--muted2)">Oferecer plano mensal flexível</td></tr>
-              <tr><td><b>Pro XL+</b></td><td>6</td><td>1%</td><td>~50%</td><td>~30%</td><td><span class="s-good">BAIXO</span></td><td style="color:var(--muted2)">Enterprise motion · CSM dedicado</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">Oportunidades de Recuperação</div>
-          <div class="card-sub" style="margin-bottom:14px">Segmentos com maior chance de win-back</div>
-          <div class="bar-row"><div class="bar-lbl">Win-back (10+ pedidos)</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent)">157</div></div><div class="bar-pct">28%</div></div>
-          <div class="bar-row"><div class="bar-lbl">Pausa de plano</div><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--blue)">68</div></div><div class="bar-pct">12%</div></div>
-          <div class="bar-row"><div class="bar-lbl">Downgrade (budget)</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--amber)">26</div></div><div class="bar-pct">5%</div></div>
-          <div class="bar-row"><div class="bar-lbl">Alternativa → retorno</div><div class="bar-track"><div class="bar-fill light" style="width:17%;background:var(--muted)">27</div></div><div class="bar-pct">5%</div></div>
-          <div style="margin-top:12px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:7px;padding:12px">
-            <div style="font-family:'Syne',sans-serif;font-size:15px;color:var(--accent)">225 clientes recuperáveis</div>
-            <div style="font-size:10px;color:var(--muted2);margin-top:3px">Com ações direcionadas — 39% do churn pode ser revertido</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">Padrões nos Comentários</div>
-          <div class="card-sub" style="margin-bottom:10px">Rejection comments reais</div>
-          <div id="comment-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px"></div>
-          <div id="comment-phrases"></div>
-        </div>
-
-      <!-- LEADS -->
-      <div class="card" style="margin-top:14px">
-        <div class="card-header" style="flex-wrap:wrap;gap:12px;">
-          <div>
-            <div class="card-title">Lista de Leads · Cancelamentos</div>
-            <div class="card-sub">570 registros reais — clique no email para contato</div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <input id="lead-search" class="search-box" placeholder="Buscar nome ou email..." style="width:210px;" oninput="filterLeads()">
-            <select id="lead-reason" class="period-sel" onchange="filterLeads()">
-              <option value="">Todos os motivos</option>
-              <option>No longer needs Snov.io</option>
-              <option>Wants to pause</option>
-              <option>Not satisfied with the service</option>
-              <option>Found an alternative</option>
-              <option>Subscription out of budget</option>
-              <option>Doesn't like auto-renewals</option>
-              <option>Other</option>
-            </select>
-            <select id="lead-plan" class="period-sel" onchange="filterLeads()">
-              <option value="">Todos os planos</option>
-              <option value="S">Starter S</option>
-              <option value="M">Pro M</option>
-              <option value="L">Pro L</option>
-              <option value="XL">Pro XL</option>
-              <option value="XXL">Pro XXL</option>
-            </select>
-            <span id="lead-count" style="font-size:9px;color:var(--muted);letter-spacing:1px;">570 leads</span>
-          </div>
-        </div>
-        <div style="overflow-x:auto;max-height:420px;overflow-y:auto;">
-          <table class="bench-table">
-            <thead><tr style="background:var(--surface);">
-              <th>Nome</th><th>Email</th><th>Plano</th><th>Motivo</th><th>Pedidos</th><th>Cancelamento</th>
-            </tr></thead>
-            <tbody id="leads-tbody"></tbody>
-          </table>
-        </div>
-      </div>
+    <div class="stats-strip">
+      <div class="stat-box"><div class="stat-lbl">Total</div><div class="stat-val sv-dark" id="st-total">0</div></div>
+      <div class="stat-box"><div class="stat-lbl">Abertos</div><div class="stat-val sv-purple" id="st-open">0</div></div>
+      <div class="stat-box"><div class="stat-lbl">Resolvidos</div><div class="stat-val sv-green" id="st-resolved">0</div></div>
+      <div class="stat-box"><div class="stat-lbl">Urgentes +7d</div><div class="stat-val sv-red" id="st-urgent">0</div></div>
+      <div class="stat-box"><div class="stat-lbl">Média dias</div><div class="stat-val sv-dark" id="st-avg">—</div></div>
     </div>
 
-    <!-- ════ BENCHMARK ════ -->
-    <div class="page" id="page-benchmark">
-      <div class="page-header">
-        <div class="page-title">Benchmarks <span>Globais</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Top 10 SaaS do mundo vs Snov.io</div>
-      </div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="card-header">
-          <div><div class="card-title">KPIs de Retenção — Top SaaS vs Snov.io</div><div class="card-sub">Benchmarks públicos 2025–2026 · Databox, ChartMogul, Flowjam</div></div>
-          <span class="chip chip-amber">Snov.io destacado</span>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="bench-table">
-            <thead><tr><th>Empresa</th><th>Segmento</th><th>Churn Mensal</th><th>NRR</th><th>LTV:CAC</th><th>Payback</th><th>Estratégia Anti-churn</th></tr></thead>
-            <tbody>
-              <tr><td><b>Slack</b></td><td style="color:var(--muted)">PLG / Collab</td><td><span class="s-good">~1.5%</span></td><td style="color:var(--accent)">125%+</td><td>8x+</td><td>&lt;6m</td><td style="color:var(--muted2)">Viral loops · 2.000 msgs hook</td></tr>
-              <tr><td><b>Notion</b></td><td style="color:var(--muted)">PLG / Produtividade</td><td><span class="s-good">~2%</span></td><td style="color:var(--accent)">120%+</td><td>7x</td><td>&lt;8m</td><td style="color:var(--muted2)">Templates · comunidade · free tier generoso</td></tr>
-              <tr><td><b>Figma</b></td><td style="color:var(--muted)">PLG / Design</td><td><span class="s-good">~1.8%</span></td><td style="color:var(--accent)">130%+</td><td>9x</td><td>&lt;6m</td><td style="color:var(--muted2)">Colaboração real-time · cross-functional</td></tr>
-              <tr><td><b>HubSpot</b></td><td style="color:var(--muted)">SaaS / CRM</td><td><span class="s-good">~2.5%</span></td><td style="color:var(--accent)">110%</td><td>6x</td><td>12m</td><td style="color:var(--muted2)">Health scores · CS proativo</td></tr>
-              <tr><td><b>Stripe</b></td><td style="color:var(--muted)">Fintech / API</td><td><span class="s-good">~1%</span></td><td style="color:var(--accent)">140%+</td><td>10x</td><td>&lt;4m</td><td style="color:var(--muted2)">Revenue expansion · produtos adicionais</td></tr>
-              <tr><td><b>Salesforce</b></td><td style="color:var(--muted)">Enterprise CRM</td><td><span class="s-good">~3%</span></td><td style="color:var(--accent)">115%</td><td>5x</td><td>18m</td><td style="color:var(--muted2)">CSM dedicado · contratos anuais</td></tr>
-              <tr><td><b>Zoom</b></td><td style="color:var(--muted)">PLG / Video</td><td><span class="s-warn">~4%</span></td><td>105%</td><td>5x</td><td>10m</td><td style="color:var(--muted2)">Free primeiro · onboarding rápido</td></tr>
-              <tr><td><b>Canva</b></td><td style="color:var(--muted)">PLG / Design</td><td><span class="s-good">~2%</span></td><td style="color:var(--accent)">120%</td><td>8x</td><td>&lt;6m</td><td style="color:var(--muted2)">Templates virais · teams como upgrade</td></tr>
-              <tr><td><b>Intercom</b></td><td style="color:var(--muted)">SaaS / CS</td><td><span class="s-warn">~3.5%</span></td><td>112%</td><td>5x</td><td>14m</td><td style="color:var(--muted2)">In-app messaging · triggers de risco</td></tr>
-              <tr><td><b>Datadog</b></td><td style="color:var(--muted)">SaaS / Dev</td><td><span class="s-good">~1.5%</span></td><td style="color:var(--accent)">130%</td><td>9x</td><td>&lt;8m</td><td style="color:var(--muted2)">Usage-based · land &amp; expand</td></tr>
-              <tr class="snov"><td><b>⟶ Snov.io (est.)</b></td><td style="color:var(--muted)">SaaS / Sales</td><td><span class="s-bad">~3.2%+</span></td><td style="color:var(--amber)">~105%</td><td style="color:var(--amber)">~4.8x</td><td style="color:var(--amber)">~10m</td><td style="color:var(--muted2)">⚡ Oportunidade de melhoria</td></tr>
-              <tr><td colspan="7" style="font-size:9px;color:var(--muted);padding:6px 10px">Mediana SaaS SMB (Databox 2025): churn ~7%/mês — Snov.io está abaixo da mediana, mas longe do top 10.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">O que separa os melhores?</div>
-          <div class="card-sub" style="margin-bottom:12px">Padrões comuns das top 10 no controle de churn</div>
-          <div class="insight-card blue" style="margin-bottom:8px"><div class="insight-header"><span>🔁</span><span class="insight-title">Viral Loops (Slack, Figma, Notion)</span></div><div class="insight-body">O produto cresce dentro da empresa. Snov.io pode criar isso com convite de time nas campanhas.</div></div>
-          <div class="insight-card green" style="margin-bottom:8px"><div class="insight-header"><span>🎯</span><span class="insight-title">Aha! Moment Rápido (Zoom, Canva)</span></div><div class="insight-body">43% do churn veio de clientes com 1–3 pedidos — claramente não chegaram ao momento de valor.</div></div>
-          <div class="insight-card amber"><div class="insight-header"><span>💰</span><span class="insight-title">Expansão de Receita (Stripe, Datadog)</span></div><div class="insight-body">O LIA da Snov.io tem potencial de NRR &gt; 100% — mas só 11% do churn o usava.</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">Gap da Snov.io vs Melhores</div>
-          <div class="card-sub" style="margin-bottom:12px">Onde há mais espaço para melhorar</div>
-          <div class="bar-row"><div class="bar-lbl">Churn (meta: &lt;2%)</div><div class="bar-track"><div class="bar-fill" style="width:66%;background:var(--red)">3.2% atual</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">NRR (meta: 120%+)</div><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--amber)">~105%</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">LTV:CAC (meta: 7x+)</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--blue)">4.8x</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Adoção LIA (meta: 40%+)</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:var(--amber)">11%</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Team ownership (meta: 40%+)</div><div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--accent)">17%</div></div></div>
-          <div style="margin-top:12px;background:rgba(91,143,255,0.08);border-radius:6px;padding:12px;font-size:10px;color:var(--muted2);line-height:1.6"><b style="color:var(--blue)">Prioridade #1:</b> Reduzir churn do Starter S de ~5% para &lt;3% via onboarding reformulado — impacto direto no NRR.</div>
-        </div>
-      </div>
+    <div class="filters-bar">
+      <div class="fp active" id="fp-all" onclick="sf('all')">Todos</div>
+      <div class="fp" id="fp-open" onclick="sf('open')">Abertos</div>
+      <div class="fp" id="fp-resolved" onclick="sf('resolved')">Resolvidos</div>
+      <div class="fp" id="fp-urgent" onclick="sf('urgent')">⚠ Urgentes</div>
+      <div class="fp" id="fp-critical" onclick="sf('critical')">Critical</div>
+      <div class="fp" id="fp-high" onclick="sf('high')">High</div>
+      <div class="fp" id="fp-medium" onclick="sf('medium')">Medium</div>
+      <div class="fp" id="fp-low" onclick="sf('low')">Low</div>
     </div>
 
-    <!-- ════ PLAYBOOKS ════ -->
-    <div class="page" id="page-playbooks">
-      <div class="page-header">
-        <div class="page-title">Playbooks das <span>Top 10</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Táticas reais de Slack, Notion, Figma, HubSpot, Stripe — adaptadas para Snov.io</div>
-      </div>
-      <div class="playbook-grid" id="playbook-grid"></div>
-    </div>
-
-    <!-- ════ TASKS ════ -->
-    <div class="page" id="page-tasks">
-      <div class="page-header">
-        <div class="page-title">Plano de <span>Ação</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Tasks priorizadas com base nos dados reais + benchmarks globais</div>
-      </div>
-      <div class="grid-31">
-        <div class="card">
-          <div class="card-header">
-            <div><div class="card-title">Backlog de Ações</div><div class="card-sub">Clique para marcar como concluído</div></div>
-            <div style="display:flex;gap:6px"><span class="chip chip-red" id="open-count">0 abertas</span><span class="chip chip-green" id="done-count">0 feitas</span></div>
-          </div>
-          <div id="task-list"></div>
-        </div>
-        <div>
-          <div class="card" style="margin-bottom:14px">
-            <div class="card-title" style="margin-bottom:14px">Progresso</div>
-            <div style="text-align:center"><canvas id="progressDonut" width="160" height="160"></canvas></div>
-          </div>
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px">Por Prioridade</div>
-            <div id="priority-breakdown"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ UPLOAD ════ -->
-    <div class="page" id="page-upload">
-      <div class="page-header">
-        <div class="page-title">Importar <span>Dados</span></div>
-        <div class="page-sub">Carregue seu CSV de churn e todos os dashboards atualizam automaticamente</div>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:14px">Arquivo Atual</div>
-          <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:7px;padding:14px;display:flex;align-items:center;gap:12px">
-            <span style="font-size:22px">📄</span>
-            <div><div style="font-size:12px;color:var(--accent)">users__3_.csv</div><div style="font-size:10px;color:var(--muted)">570 registros · Dez/25–Mar/26</div></div>
-          </div>
-          <div style="margin-top:14px">
-            <div class="bar-row"><div class="bar-lbl">Registros válidos</div><div class="bar-track"><div class="bar-fill" style="width:97%;background:var(--accent)">556</div></div><div class="bar-pct">97%</div></div>
-            <div class="bar-row"><div class="bar-lbl">Com motivo</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--blue)">524</div></div><div class="bar-pct">92%</div></div>
-            <div class="bar-row"><div class="bar-lbl">Com comentário</div><div class="bar-track"><div class="bar-fill" style="width:68%;background:var(--amber)">388</div></div><div class="bar-pct">68%</div></div>
-          </div>
-          <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Email</div><div style="color:var(--muted)">Identificador único</div></div>
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Reason</div><div style="color:var(--muted)">Motivo de saída</div></div>
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Plan on Cancel</div><div style="color:var(--muted)">Plano no cancelamento</div></div>
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Cancel dates</div><div style="color:var(--muted)">Data do cancelamento</div></div>
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Total # orders</div><div style="color:var(--muted)">Engajamento histórico</div></div>
-            <div style="background:rgba(0,229,160,0.06);border-radius:6px;padding:9px;font-size:10px"><div style="color:var(--accent);margin-bottom:2px">✓ Is team owner</div><div style="color:var(--muted)">Proprietário de time</div></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:6px">Carregar Novo CSV</div>
-          <div style="font-size:10px;color:var(--muted);margin-bottom:14px">Formato: Email; Full name; Registered; Plan on Cancel Attempt; Reason...</div>
-          <label class="upload-zone" id="uploadZone">
-            <input type="file" accept=".csv" id="uploadInput" onchange="handleUpload(this)">
-            <div style="font-size:28px;margin-bottom:10px">📂</div>
-            <div style="font-size:12px;color:var(--text)">Arrastar CSV aqui ou clicar</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:4px">Suporta separador ; ou ,</div>
-          </label>
-          <div id="upload-status" style="display:none;margin-top:12px">
-            <div style="background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:6px;padding:12px;font-size:11px;color:var(--accent)">✓ <span id="upload-msg"></span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ ALERTAS ════ -->
-    <div class="page" id="page-alertas">
-      <div class="page-header">
-        <div class="page-title">Alertas <span>Ativos</span></div>
-        <div class="page-sub"><span class="live-dot"></span>3 alertas críticos baseados nos seus dados reais</div>
-      </div>
-
-      <div class="kpi-strip">
-        <div class="kpi-box red"><div class="kpi-label">Alertas Críticos</div><div class="kpi-val red">3</div><div class="kpi-meta">Ação imediata necessária</div></div>
-        <div class="kpi-box amber"><div class="kpi-label">Alertas de Atenção</div><div class="kpi-val amber">4</div><div class="kpi-meta">Monitorar esta semana</div></div>
-        <div class="kpi-box blue"><div class="kpi-label">Informativos</div><div class="kpi-val blue">2</div><div class="kpi-meta">Para acompanhamento</div></div>
-        <div class="kpi-box green"><div class="kpi-label">Resolvidos</div><div class="kpi-val green">0</div><div class="kpi-meta">Nenhum resolvido ainda</div></div>
-      </div>
-
-      <div class="divider">🔴 Críticos — Ação Imediata</div>
-
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:18px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:18px">🚨</span>
-              <span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">395 cancelamentos no Starter S — 69% do churn total</span>
-            </div>
-            <span class="chip chip-red">CRÍTICO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.7;margin-bottom:10px">O plano Starter S concentra <b style="color:var(--text)">69% de todos os cancelamentos</b>. A maioria saiu com apenas 1–3 pedidos feitos, o que indica que o <b style="color:var(--text)">Aha! Moment não está sendo alcançado</b>. Comparando com Zoom e Canva: ambos resolveram crises similares reformulando o onboarding para entregar valor nos primeiros 10 minutos.</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-accent" style="font-size:10px;padding:6px 12px" onclick="document.querySelector('[data-page=tasks]').click()">→ Ver plano de ação</button>
-            <button class="btn btn-ghost" style="font-size:10px;padding:6px 12px" onclick="document.querySelector('[data-page=playbooks]').click()">→ Ver playbook Zoom/Canva</button>
-          </div>
-        </div>
-
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:18px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:18px">🚨</span>
-              <span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">Janeiro/26 bateu recorde: 189 cancelamentos em 1 mês</span>
-            </div>
-            <span class="chip chip-red">CRÍTICO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.7;margin-bottom:10px">Janeiro foi o <b style="color:var(--text)">pior mês registrado</b> com 189 saídas — 56% acima da média. Fevereiro (188) manteve o mesmo nível. Esse padrão sugere <b style="color:var(--text)">sazonalidade de início de ano</b> (revisão de budget corporativo) ou um evento pontual. É necessário investigar se houve mudança de preço, produto ou comunicação nesse período.</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-accent" style="font-size:10px;padding:6px 12px" onclick="document.querySelector('[data-page=churn]').click()">→ Ver análise por mês</button>
-          </div>
-        </div>
-
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:18px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:18px">🚨</span>
-              <span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">99 Team Owners cancelaram sem intervenção de CS</span>
-            </div>
-            <span class="chip chip-red">CRÍTICO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.7;margin-bottom:10px">Team owners representam o <b style="color:var(--text)">maior MRR por conta</b> e têm potencial de múltiplos seats. Perder 99 deles em 4 meses sem nenhuma intervenção documentada é um sinal de que não existe um processo de <b style="color:var(--text)">CS proativo para esse segmento</b>. Salesforce e HubSpot tratam team owners com QBRs e CSM dedicado.</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-accent" style="font-size:10px;padding:6px 12px" onclick="document.querySelector('[data-page=playbooks]').click()">→ Ver playbook Salesforce</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider">🟡 Atenção — Monitorar Esta Semana</div>
-
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div style="display:flex;align-items:center;gap:8px"><span>⚠️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--amber)">68 clientes escolheram "Pause" — feature inexistente</span></div>
-            <span class="chip chip-amber">ATENÇÃO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2)">12% dos churns queriam pausar, não cancelar. Implementar pausa de plano pode recuperar esses clientes imediatamente.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div style="display:flex;align-items:center;gap:8px"><span>⚠️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--amber)">LIA com apenas 11% de adoção entre churned users</span></div>
-            <span class="chip chip-amber">ATENÇÃO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2)">Usuários com LIA ativo têm muito mais stickiness. Apenas 64 de 570 churns usavam o recurso — aumentar adoção reduz churn diretamente.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div style="display:flex;align-items:center;gap:8px"><span>⚠️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--amber)">27 clientes foram para um concorrente</span></div>
-            <span class="chip chip-amber">ATENÇÃO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2)">5% dos churns saíram por "Found an alternative". Identificar qual concorrente e o que oferece que a Snov.io não tem é urgente.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div style="display:flex;align-items:center;gap:8px"><span>⚠️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--amber)">26 cancelamentos por budget — sem downgrade oferecido</span></div>
-            <span class="chip chip-amber">ATENÇÃO</span>
-          </div>
-          <div style="font-size:11px;color:var(--muted2)">Clientes que cancelam por preço poderiam ser retidos com downgrade para plano menor. Não existe esse fluxo atualmente.</div>
-        </div>
-      </div>
-
-      <div class="divider">🔵 Informativos</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:8px;padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span>ℹ️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--blue)">Snov.io está abaixo da mediana de churn SaaS SMB (7%)</span></div>
-          <div style="font-size:11px;color:var(--muted2)">~3.2% de churn mensal está bem abaixo da mediana de mercado. A base é boa — o objetivo agora é chegar ao nível das top 10 (1–2.5%).</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:8px;padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span>ℹ️</span><span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--blue)">28% dos churns tinham 10+ pedidos — alta chance de win-back</span></div>
-          <div style="font-size:11px;color:var(--muted2)">157 clientes engajados cancelaram por mudança de contexto, não por insatisfação. São os mais fáceis de recuperar com campanha direcionada.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ PERFIL DE RISCO ════ -->
-    <div class="page" id="page-risco">
-      <div class="page-header">
-        <div class="page-title">Perfil de <span>Risco</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Segmentação de risco baseada nos 570 cancelamentos reais</div>
-      </div>
-
-      <div class="kpi-strip">
-        <div class="kpi-box red"><div class="kpi-label">Risco Crítico</div><div class="kpi-val red">395</div><div class="kpi-meta">Starter S · 69%</div></div>
-        <div class="kpi-box amber"><div class="kpi-label">Risco Alto</div><div class="kpi-val amber">122</div><div class="kpi-meta">Pro M · 21%</div></div>
-        <div class="kpi-box blue"><div class="kpi-label">Risco Médio</div><div class="kpi-val blue">37</div><div class="kpi-meta">Pro L + Pro S(3M)</div></div>
-        <div class="kpi-box green"><div class="kpi-label">Risco Baixo</div><div class="kpi-val green">16</div><div class="kpi-meta">Pro XL + outros</div></div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <div class="card-header">
-          <div><div class="card-title">Score de Risco por Segmento</div><div class="card-sub">Baseado em volume, engajamento, LIA e perfil de time</div></div>
-          <span class="chip chip-red">Dados reais</span>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="bench-table">
-            <thead><tr><th>Segmento</th><th>Churns</th><th>% Total</th><th>Pedidos médios</th><th>Com LIA</th><th>Team Owner</th><th>Score</th><th>Ação prioritária</th></tr></thead>
-            <tbody>
-              <tr><td><b>Starter S · 1–3 pedidos</b></td><td style="color:var(--red)">~246</td><td>43%</td><td style="color:var(--red)">1.5x</td><td style="color:var(--red)">~4%</td><td>~8%</td><td><span class="s-bad">10/10</span></td><td style="color:var(--muted2)">Onboarding emergencial · aha moment</td></tr>
-              <tr><td><b>Starter S · 4–10 pedidos</b></td><td style="color:var(--amber)">~100</td><td>18%</td><td>6x</td><td>~10%</td><td>~12%</td><td><span class="s-warn">7/10</span></td><td style="color:var(--muted2)">Engajamento proativo · upsell</td></tr>
-              <tr><td><b>Pro M · todos</b></td><td style="color:var(--amber)">122</td><td>21%</td><td>8x</td><td>~14%</td><td>~22%</td><td><span class="s-warn">6/10</span></td><td style="color:var(--muted2)">CS check-in 30d · upsell para L</td></tr>
-              <tr><td><b>Starter S · 10+ pedidos</b></td><td style="color:var(--blue)">~49</td><td>9%</td><td>15x</td><td>~12%</td><td>~18%</td><td><span class="s-warn">5/10</span></td><td style="color:var(--muted2)">Win-back campaign imediata</td></tr>
-              <tr><td><b>Pro L / Pro S(3M)</b></td><td>37</td><td>6%</td><td>11x</td><td>~18%</td><td>~30%</td><td><span class="s-warn">4/10</span></td><td style="color:var(--muted2)">Custom deal · plano mensal</td></tr>
-              <tr><td><b>Pro XL+</b></td><td style="color:var(--accent)">16</td><td>3%</td><td>14x</td><td>~30%</td><td>~50%</td><td><span class="s-good">2/10</span></td><td style="color:var(--muted2)">Enterprise motion · CSM dedicado</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">Fatores que Aumentam o Risco</div>
-          <div class="card-sub" style="margin-bottom:14px">Correlações encontradas nos dados reais</div>
-          <div class="bar-row"><div class="bar-lbl">Plano Starter S</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)">Risco máximo</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">1–3 pedidos feitos</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--red)">Risco muito alto</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Sem LIA ativo</div><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--amber)">Risco alto</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Não é team owner</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--amber)">Risco moderado</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Registrado há &lt;30 dias</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--blue)">Risco moderado</div></div></div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:4px">Fatores que Reduzem o Risco</div>
-          <div class="card-sub" style="margin-bottom:14px">Indicadores de retenção nos dados</div>
-          <div class="bar-row"><div class="bar-lbl">LIA ativo</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent)">Proteção forte</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">10+ pedidos feitos</div><div class="bar-track"><div class="bar-fill" style="width:88%;background:var(--accent)">Proteção forte</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">É team owner</div><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--blue)">Proteção boa</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Plano Pro M ou superior</div><div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--blue)">Proteção moderada</div></div></div>
-          <div class="bar-row"><div class="bar-lbl">Cliente há 12+ meses</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--amber)">Proteção moderada</div></div></div>
-        </div>
-      </div>
-
-      <div class="divider">Scorecard de Recuperação</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-          <div style="font-family:'Syne',sans-serif;font-size:28px;color:var(--accent)">68</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Recuperáveis<br>via Pausa</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-          <div style="font-family:'Syne',sans-serif;font-size:28px;color:var(--blue)">157</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Win-back<br>(10+ pedidos)</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-          <div style="font-family:'Syne',sans-serif;font-size:28px;color:var(--amber)">26</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Downgrade<br>(budget)</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
-          <div style="font-family:'Syne',sans-serif;font-size:28px;color:var(--accent)">225</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Total<br>recuperável</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ RECOMENDAÇÕES ════ -->
-    <div class="page" id="page-recomendacoes">
-      <div class="page-header">
-        <div class="page-title"><span>Recomendações</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Plano de 90 dias baseado nos dados reais + top 10 empresas globais</div>
-      </div>
-
-      <div class="kpi-strip">
-        <div class="kpi-box red"><div class="kpi-label">Semanas 1–2</div><div class="kpi-val red" style="font-size:16px;padding-top:4px">Quick Wins</div><div class="kpi-meta">Ações imediatas</div></div>
-        <div class="kpi-box amber"><div class="kpi-label">Semanas 3–6</div><div class="kpi-val amber" style="font-size:16px;padding-top:4px">Estrutural</div><div class="kpi-meta">Processos e produto</div></div>
-        <div class="kpi-box blue"><div class="kpi-label">Semanas 7–12</div><div class="kpi-val blue" style="font-size:16px;padding-top:4px">Escala</div><div class="kpi-meta">Crescimento sustentável</div></div>
-        <div class="kpi-box green"><div class="kpi-label">Meta 90 dias</div><div class="kpi-val green" style="font-size:16px;padding-top:4px">&lt;2.5% churn</div><div class="kpi-meta">De 3.2% → &lt;2.5%</div></div>
-      </div>
-
-      <div class="divider">🚀 Semanas 1–2 · Quick Wins</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--red);border-radius:8px;padding:18px">
-          <div style="font-size:9px;color:var(--red);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">IMPACTO: 68 clientes</div>
-          <div style="font-family:'Syne',sans-serif;font-size:14px;margin-bottom:8px">Criar opção de "Pausa de Plano"</div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.6">Feature simples: pausar cobrança por 30/60 dias. <b style="color:var(--text)">12% dos churns escolheram "Wants to pause"</b> — eles ainda querem o produto. Implementar isso no painel de cancelamento pode segurar dezenas de clientes por mês.</div>
-          <div style="margin-top:10px;font-size:10px;color:var(--muted)">Inspirado em: Notion, Slack, HubSpot</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--red);border-radius:8px;padding:18px">
-          <div style="font-size:9px;color:var(--red);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">IMPACTO: 157 clientes</div>
-          <div style="font-family:'Syne',sans-serif;font-size:14px;margin-bottom:8px">Campanha Win-Back para 10+ pedidos</div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.6">Clientes com 10+ pedidos cancelaram por <b style="color:var(--text)">mudança de contexto, não de satisfação</b>. Email sequence de 3 mensagens: 1) "Sentimos sua falta" + resultado que tiveram, 2) Oferta de 30% de desconto, 3) Novo recurso relevante.</div>
-          <div style="margin-top:10px;font-size:10px;color:var(--muted)">Inspirado em: HubSpot, Salesforce</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--amber);border-radius:8px;padding:18px">
-          <div style="font-size:9px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">IMPACTO: 99 team owners</div>
-          <div style="font-family:'Syne',sans-serif;font-size:14px;margin-bottom:8px">Alerta de CS para Team Owners em risco</div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.6">Criar tag no CRM para team owners + alerta quando ficam <b style="color:var(--text)">7 dias sem login ou sem novo pedido</b>. CS entra em contato proativamente antes do cancelamento.</div>
-          <div style="margin-top:10px;font-size:10px;color:var(--muted)">Inspirado em: Salesforce, Intercom</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--amber);border-radius:8px;padding:18px">
-          <div style="font-size:9px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">IMPACTO: 26 clientes</div>
-          <div style="font-family:'Syne',sans-serif;font-size:14px;margin-bottom:8px">Downgrade no fluxo de cancelamento</div>
-          <div style="font-size:11px;color:var(--muted2);line-height:1.6">Antes do cancelamento final: <b style="color:var(--text)">oferecer downgrade para plano mais barato</b>. Clientes que cancelam por budget (26) provavelmente aceitariam um plano XS/Trial pago a preço reduzido.</div>
-          <div style="margin-top:10px;font-size:10px;color:var(--muted)">Inspirado em: Canva, Zoom</div>
-        </div>
-      </div>
-
-      <div class="divider">🔧 Semanas 3–6 · Estrutural</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">PRODUTO</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">Reformular Onboarding Starter S</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">43% dos churns tinham apenas 1–3 pedidos. Criar fluxo guiado de 7 dias com template de campanha pronto para usar no 1º dia. Meta: usuário envia primeira campanha em &lt;10 min.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">CS / DADOS</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">Criar Health Score no CRM</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">Score simples: pedidos (40pts) + LIA ativo (30pts) + login recente (20pts) + é team owner (10pts). Abaixo de 40: trigger automático de CS. Acima de 80: candidato a upsell.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">PRODUTO</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">Push de Adoção do LIA</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">Apenas 11% dos churns usavam LIA. Criar in-app prompt no dia 3 de uso sugerindo LinkedIn Automation com caso de uso concreto. Meta: 30% de adoção entre usuários ativos.</div>
-        </div>
-      </div>
-
-      <div class="divider">📈 Semanas 7–12 · Escala</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">CRESCIMENTO</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">Viral Loop de Times</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">Incentivar Starter S a convidar membros de time. Cada convite aceito = créditos extras. PLG como Slack e Figma: o produto cresce dentro das empresas.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">DADOS</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">MRR Bridge Mensal</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">Implementar dashboard de MRR com breakdown: Novo + Expansão – Contração – Churn. Medir NRR mensalmente. Meta de NRR: 115% em 90 dias.</div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:8px;padding:16px">
-          <div style="font-size:9px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">ESTRATÉGIA</div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;margin-bottom:7px">Cohort Analysis Mensal</div>
-          <div style="font-size:10px;color:var(--muted2);line-height:1.6">Rastrear retenção de cada coorte de aquisição. Comparar coorte pré e pós onboarding novo. Isso vai provar o ROI de cada melhoria e guiar as próximas decisões.</div>
-        </div>
-      </div>
-
-      <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:20px">
-        <div style="font-family:'Syne',sans-serif;font-size:16px;color:var(--accent);margin-bottom:8px">Meta: Churn de 3.2% → &lt;2.5% em 90 dias</div>
-        <div style="font-size:11px;color:var(--muted2);line-height:1.7">Se apenas as 3 ações de Quick Win forem executadas (pausa + win-back + downgrade), o potencial de recuperação imediata é de <b style="color:var(--text)">225 clientes</b>. Com o onboarding reformulado e o health score funcionando, a projeção é reduzir o churn mensal do Starter S de ~5% para ~2.5%, alinhando a Snov.io com o benchmark das melhores empresas SaaS do mundo.</div>
-        <button class="btn btn-accent" style="margin-top:14px" onclick="document.querySelector('[data-page=tasks]').click()">→ Começar pelo Plano de Ação</button>
-      </div>
-    </div>
-
-    <!-- ════ INSIGHTS ════ -->
-    <div class="page" id="page-insights">
-      <div class="page-header">
-        <div class="page-title">AI <span>Insights</span></div>
-        <div class="page-sub"><span class="live-dot"></span>Análise automática: dados reais + benchmarks top 10</div>
-      </div>
-      <div id="insights-list"></div>
-    </div>
-
+    <div class="content" id="list"></div>
   </div>
 </div>
-</div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
+<div class="overlay" id="modal" onclick="ho(event)">
   <div class="modal">
-    <span class="modal-close" onclick="closeModal()">×</span>
-    <div class="modal-title">Nova Ação</div>
-    <div class="modal-sub">Adicionar ao plano de retenção da Snov.io</div>
-    <input id="new-task-title" class="modal-input" placeholder="Título da ação...">
-    <select id="new-task-priority" class="modal-input">
-      <option value="high">Alta prioridade</option>
-      <option value="medium">Média prioridade</option>
-      <option value="low">Baixa prioridade</option>
-    </select>
-    <select id="new-task-tag" class="modal-input">
-      <option>Onboarding</option><option>Retenção</option><option>Win-back</option>
-      <option>Produto</option><option>CS</option><option>Dados</option>
-    </select>
-    <button class="btn btn-accent" style="width:100%;padding:10px;margin-top:4px" onclick="addTask()">Adicionar Ação</button>
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="mtitle">Novo Ticket</div><div class="modal-sub">Preencha os detalhes do ticket de QA</div></div>
+      <span class="modal-x" onclick="closeModal()">×</span>
+    </div>
+    <input type="hidden" id="eid">
+    <div class="field"><label class="flbl">Título *</label><input class="finput" id="ft" placeholder="Descreva o bug ou problema..."></div>
+    <div class="frow">
+      <div class="field"><label class="flbl">Reportado por *</label><input class="finput" id="fr" placeholder="Nome do funcionário"></div>
+      <div class="field"><label class="flbl">Prioridade</label>
+        <select class="finput" id="fp" style="appearance:none;cursor:pointer">
+          <option value="critical">🔴 Critical</option>
+          <option value="high">🟠 High</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label class="flbl">Link da Task</label><input class="finput" id="fu" placeholder="https://linear.app/..."></div>
+    <div class="field"><label class="flbl">Link Google Chat</label><input class="finput" id="fc" placeholder="https://chat.google.com/..."></div>
+    <div class="field"><label class="flbl">Link do Ticket</label><input class="finput" id="fk" placeholder="https://jira.atlassian.com/..."></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="save()">Salvar Ticket</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ══ DATA ══
-const DATA = {
-  reasons:{'No longer needs Snov.io':290,'Other':70,'Wants to pause':68,'Not satisfied':58,'Found alternative':27,'Budget':26,'Anti auto-renewal':29},
-  plans:{S:395,M:122,L:22,'Pro S(3M)':15,'Pro XL':5,'Pro(P5K)':5,'XS/Trial':3},
-  monthly:{Dec25:121,Jan26:189,Feb26:188,Mar26:79},
-  total:570
-};
-
-const PLAYBOOKS = [
-  {company:'Slack',color:'#4A154B',logo:'S',title:'O Hook das 2.000 Mensagens',body:'Slack descobriu que times que trocam 2.000+ mensagens raramente cancelam. Para Snov.io: encontrar o equivalente — ex: 10 campanhas enviadas ou 500 leads exportados — e fazer TUDO para chegar lá.',impact:'+42% retenção no trial',tag:'Onboarding',barColor:'#4A154B',done:false},
-  {company:'Notion',color:'#000',logo:'N',title:'Templates como Motor de Retenção',body:'Notion criou centenas de templates prontos para ativar usuários. Para Snov.io: criar sequências de email prontas, templates de ICP, cadências por indústria. Usuário chega ao valor sem esforço.',impact:'+35% ativação',tag:'Produto',barColor:'#555',done:false},
-  {company:'Figma',color:'#F24E1E',logo:'F',title:'Colaboração como Viral Loop',body:'Figma cresceu porque designers precisam mostrar o trabalho ao time. Para Snov.io: incentivar compartilhamento de campanhas com time, co-acesso a sequências. Cada usuário traz mais usuários.',impact:'+60% expansão',tag:'Produto',barColor:'#F24E1E',done:false},
-  {company:'HubSpot',color:'#FF7A59',logo:'H',title:'Health Score Proativo',body:'HubSpot usa health score com base em uso, suporte e engajamento para agir antes do cancelamento. Para Snov.io: criar score (pedidos + LIA + login) e acionar CS quando cai abaixo do threshold.',impact:'-30% churn',tag:'CS',barColor:'#FF7A59',done:false},
-  {company:'Canva',color:'#00C4CC',logo:'C',title:'Free → Paid pelo Contexto de Time',body:'Canva é grátis individualmente. O upgrade acontece naturalmente quando você convida um time. Snov.io pode dar Starter S "quase grátis" e cobrar no contexto de equipe — múltiplos usuários.',impact:'+55% conversão',tag:'Retenção',barColor:'#00C4CC',done:false},
-  {company:'Stripe',color:'#635BFF',logo:'St',title:'Expansão pelo Uso (Land & Expand)',body:'Stripe cresce com o cliente. Cada novo produto (Radar, Billing, Connect) retém e expande MRR. Para Snov.io: LIA é o produto de expansão natural. Meta: 40%+ dos pagantes usando LIA.',impact:'NRR 140%+',tag:'Expansão',barColor:'#635BFF',done:false},
-  {company:'Intercom',color:'#1F8EFF',logo:'I',title:'In-App Intervention no Momento Certo',body:'Intercom dispara mensagens in-app quando detecta risco. Para Snov.io: se usuário Starter S não faz pedido em 7 dias → mensagem automática com template de campanha + oferta de ajuda.',impact:'-25% early churn',tag:'CS',barColor:'#1F8EFF',done:false},
-  {company:'Datadog',color:'#774AA4',logo:'D',title:'Usage-Based como Retenção Natural',body:'Datadog cobra por uso — quanto mais o cliente cresce, mais paga. Para Snov.io: créditos flexíveis podem reduzir churn de "não uso suficiente" e criar elasticidade de valor.',impact:'NRR 130%+',tag:'Produto',barColor:'#774AA4',done:false},
-  {company:'Zoom',color:'#2D8CFF',logo:'Z',title:'Onboarding em Menos de 3 Minutos',body:'Zoom foi adotado porque funcionou em 1 clique. 43% do churn Snov.io veio de usuários com 1–3 pedidos — provável fricção no setup. Simplificar = salvar ~246 clientes/trimestre.',impact:'+43% ativação',tag:'Onboarding',barColor:'#2D8CFF',done:false},
-  {company:'Salesforce',color:'#00A1E0',logo:'Sf',title:'CSM Dedicado para Team Owners',body:'Salesforce tem CSM para contas enterprise. 99 team owners cancelaram sem intervenção documentada. Um QBR trimestral ou check-in mensal para esse grupo pode mudar o cenário rapidamente.',impact:'-50% churn enterprise',tag:'CS',barColor:'#00A1E0',done:false},
+const KEY='snovio_qa_v2';
+const SAMPLE=[
+  {id:'QA-001',title:'Lead replied 2 times but wasn\'t tracked — Campaign sent 2nd follow-up which user deleted afterwards',reporter:'Lucas Maaia',priority:'high',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'https://jira.atlassian.com',createdAt:'2026-03-01',resolved:false},
+  {id:'QA-002',title:'Botão de cancelamento some no mobile iOS 16+',reporter:'Ana Souza',priority:'medium',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'',createdAt:'2026-03-05',resolved:false},
+  {id:'QA-003',title:'Tooltip de ajuda com texto cortado em tela pequena',reporter:'Pedro Lima',priority:'low',taskUrl:'',chatUrl:'',ticketUrl:'',createdAt:'2026-03-08',resolved:false},
+  {id:'QA-004',title:'CSV com caracteres especiais quebrados na exportação',reporter:'Lucas Maaia',priority:'high',taskUrl:'https://linear.app',chatUrl:'https://chat.google.com',ticketUrl:'https://jira.atlassian.com',createdAt:'2026-02-24',resolved:true},
 ];
 
-const INSIGHTS = [
-  {type:'red',icon:'🚨',title:'Starter S: Crise de Onboarding',body:'<b>395 de 570 cancelamentos</b> vieram do Starter S (69%). O padrão das top empresas (Zoom, Canva) é reduzir o time-to-value para menos de 10 minutos. Prioridade #1: <b>encontrar e acelerar o Aha! Moment do Starter S</b>.',cta:'tasks'},
-  {type:'amber',icon:'⏸️',title:'68 Clientes Querem Pausar — Feature Inexistente',body:'<b>12% dos churns</b> escolheram "Wants to pause". Slack, Notion e HubSpot têm pausas ou downgrade temporário. Implementar essa feature pode recuperar até <b>68 clientes/trimestre imediatamente</b>.',cta:'tasks'},
-  {type:'blue',icon:'🔁',title:'LIA: O Produto de Expansão Subutilizado',body:'Apenas <b>11% dos churns usavam LinkedIn Automation</b>. Figma e Datadog provaram que expansão de produto é o melhor anti-churn. Elevar adoção de LIA de 11% para 30%+ pode levar o NRR a ultrapassar 115%.',cta:'playbooks'},
-  {type:'green',icon:'♻️',title:'157 Clientes Recuperáveis Agora',body:'Clientes com <b>10+ pedidos</b> que cancelaram conhecem o produto. HubSpot e Salesforce fazem campanhas específicas para esse segmento. Uma sequência de 3 emails + oferta pode recuperar <b>20–30% desse grupo</b>.',cta:'tasks'},
-  {type:'red',icon:'👥',title:'99 Team Owners Cancelaram',body:'Team owners representam o maior potencial de expansão. Salesforce dedica CSM específico para esse perfil. <b>99 team owners</b> cancelaram sem intervenção. Criar alerta de CS para essa categoria é prioritário.',cta:'playbooks'},
-  {type:'blue',icon:'📊',title:'Snov.io está acima da mediana SMB — mas longe do top 10',body:'Mediana de churn SaaS SMB (Databox 2025): <b>7%/mês</b>. Snov.io está em ~3.2% — ótimo vs. mediana. Mas o top 10 fica entre 1–2.5%. O caminho: PLG loops, expansão via LIA, onboarding reformulado.',cta:'benchmark'},
-];
+let T=[],F='all',Q='',EID=null;
+function load(){try{const s=localStorage.getItem(KEY);T=s?JSON.parse(s):SAMPLE;}catch{T=SAMPLE;}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(T));}catch{}}
+function days(d){return Math.floor((new Date()-new Date(d))/864e5);}
+function fmt(d){return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});}
+function nid(){const n=T.map(t=>parseInt(t.id.replace('QA-',''))||0);return 'QA-'+String((n.length?Math.max(...n):0)+1).padStart(3,'0');}
 
-const TASKS_KEY = 'snovio_os_tasks_v2';
-const DEFAULT_TASKS = [
-  {id:1,title:'Mapear o "Aha! Moment" do Starter S — qual ação leva à retenção?',tag:'Onboarding',priority:'high',done:false,source:'Slack/Figma PLG'},
-  {id:2,title:'Criar fluxo de onboarding guiado para os primeiros 7 dias',tag:'Onboarding',priority:'high',done:false,source:'Canva/Zoom'},
-  {id:3,title:'Implementar feature de "Pausa de plano" — 68 churns/mês diretos',tag:'Produto',priority:'high',done:false,source:'Dados reais'},
-  {id:4,title:'Montar campanha win-back para os 157 clientes com 10+ pedidos',tag:'Win-back',priority:'high',done:false,source:'Dados reais'},
-  {id:5,title:'Criar Health Score no CRM: uso + pedidos + LIA + login recente',tag:'CS',priority:'medium',done:false,source:'HubSpot'},
-  {id:6,title:'Aumentar adoção do LIA (LinkedIn Automation) de 11% → 30%+',tag:'Produto',priority:'high',done:false,source:'Dados reais'},
-  {id:7,title:'Criar alerta automático: 0 pedidos em 14 dias → trigger de CS',tag:'CS',priority:'medium',done:false,source:'Intercom'},
-  {id:8,title:'Montar MRR Bridge mensal: Novo + Expansão – Contração – Churn',tag:'Dados',priority:'medium',done:false,source:'Stripe/ChartMogul'},
-  {id:9,title:'Segmentar ICP: comparar perfil de retidos vs. churned',tag:'Dados',priority:'medium',done:false,source:'Dados reais'},
-  {id:10,title:'Criar plano de downgrade para clientes "budget" → evitar cancelamento',tag:'Retenção',priority:'medium',done:false,source:'Dados reais'},
-  {id:11,title:'Implementar NPS in-app no dia 30 e dia 90',tag:'CS',priority:'medium',done:false,source:'HubSpot/Notion'},
-  {id:12,title:'Benchmarking mensal: Snov.io vs mediana SaaS SMB (7%)',tag:'Dados',priority:'low',done:false,source:'Databox Benchmark'},
-  {id:13,title:'Criar cohort analysis: clientes de Jan/26 — retenção mensal',tag:'Dados',priority:'medium',done:false,source:'Stripe/Amplitude'},
-  {id:14,title:'Loop viral: incentivar convite de membros de time no Starter S',tag:'Produto',priority:'low',done:false,source:'Slack/Figma'},
-  {id:15,title:'Relatório executivo semanal: Churn + MRR + Expansão em 1 página',tag:'Dados',priority:'low',done:false,source:'Salesforce/Geckoboard'},
-];
+function dpill(d,res){
+  if(res) return `<div class="dpill d-neutral">${d}d</div>`;
+  if(d<=3) return `<div class="dpill d-green">🟢 ${d}d</div>`;
+  if(d<=7) return `<div class="dpill d-yellow">🟡 ${d}d</div>`;
+  return `<div class="dpill d-red">🔴 ${d}d</div>`;
+}
+function pbadge(p){
+  const m={critical:'p-critical',high:'p-high',medium:'p-medium',low:'p-low'};
+  const l={critical:'Critical',high:'High',medium:'Medium',low:'Low'};
+  return `<span class="priority ${m[p]||'p-medium'}">${l[p]||p}</span>`;
+}
 
-// ══ NAVIGATION ══
-document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
-  item.addEventListener('click',()=>{
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    const pg = document.getElementById('page-'+item.dataset.page);
-    if(pg) pg.classList.add('active');
-    document.getElementById('crumb-text').textContent = item.textContent.replace(/\d+/g,'').trim();
-    if(item.dataset.page==='tasks') renderTasks();
+function sf(f){
+  F=f;
+  ['all','open','resolved','urgent','critical','high','medium','low'].forEach(k=>{
+    document.getElementById('fp-'+k)?.classList.toggle('active',k===f);
   });
-});
+  document.querySelectorAll('.sb-nav').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.sb-pri').forEach(n=>n.classList.remove('active'));
+  const ni={all:0,open:1,resolved:2,urgent:3}[f];
+  if(ni!==undefined) document.querySelectorAll('.sb-nav')[ni]?.classList.add('active');
+  const pi={critical:0,high:1,medium:2,low:3}[f];
+  if(pi!==undefined) document.querySelectorAll('.sb-pri')[pi]?.classList.add('active');
+  const lbl={all:'Todos os Tickets',open:'Abertos',resolved:'Resolvidos',urgent:'Urgentes (+7 dias)',critical:'Critical',high:'High Priority',medium:'Medium Priority',low:'Low Priority'};
+  document.getElementById('crumb').textContent=lbl[f]||f;
+  render();
+}
+function sq(q){Q=q.toLowerCase();render();}
 
-// ══ RENDER OVERVIEW ══
-function renderReasonsBars(){
-  const el = document.getElementById('reasons-bars'); if(!el) return;
-  const max = Math.max(...Object.values(DATA.reasons));
-  const colors = ['#ff5757','#5a6478','#5b8fff','#f0c040','#ff9d3d','#00e5a0','#c084fc'];
-  el.innerHTML = Object.entries(DATA.reasons).map(([k,v],i)=>`
-    <div class="bar-row">
-      <div class="bar-lbl">${k}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/max*100)}%;background:${colors[i]}">${v}</div></div>
-      <div class="bar-pct">${Math.round(v/DATA.total*100)}%</div>
-    </div>`).join('');
+function getFilt(){
+  let l=[...T];
+  if(F==='open') l=l.filter(t=>!t.resolved);
+  else if(F==='resolved') l=l.filter(t=>t.resolved);
+  else if(F==='urgent') l=l.filter(t=>!t.resolved&&days(t.createdAt)>=7);
+  else if(['critical','high','medium','low'].includes(F)) l=l.filter(t=>t.priority===F);
+  if(Q) l=l.filter(t=>t.title.toLowerCase().includes(Q)||t.id.toLowerCase().includes(Q)||(t.reporter||'').toLowerCase().includes(Q));
+  return l;
 }
 
-function renderMonthChart(){
-  const el = document.getElementById('month-chart'); if(!el) return;
-  const max = Math.max(...Object.values(DATA.monthly));
-  const mc = {Dec25:{l:'Dez/25',c:'#5b8fff'},Jan26:{l:'Jan/26',c:'#ff5757'},Feb26:{l:'Fev/26',c:'#f0c040'},Mar26:{l:'Mar/26',c:'#00e5a0'}};
-  el.innerHTML = Object.entries(DATA.monthly).map(([k,v])=>`
-    <div class="mc-col">
-      <div class="mc-val">${v}</div>
-      <div class="mc-bar" style="height:${Math.round(v/max*68)}px;background:${mc[k].c};opacity:.85;min-height:6px"></div>
-      <div class="mc-label">${mc[k].l}</div>
-    </div>`).join('');
-}
-
-function renderPlansBars(){
-  const el = document.getElementById('plans-bars'); if(!el) return;
-  const max = DATA.plans.S;
-  const colors = ['#ff5757','#f0c040','#5b8fff','#ff9d3d','#c084fc','#00e5a0','#5a6478'];
-  el.innerHTML = Object.entries(DATA.plans).map(([k,v],i)=>`
-    <div class="bar-row">
-      <div class="bar-lbl">${k}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/max*100)}%;background:${colors[i]}">${v}</div></div>
-      <div class="bar-pct">${Math.round(v/DATA.total*100)}%</div>
-    </div>`).join('');
-}
-
-function drawEngagementDonut(){
-  const c = document.getElementById('engagementDonut'); if(!c) return;
-  c.width = c.parentElement?.clientWidth || 300; c.height = 160;
-  const ctx = c.getContext('2d');
-  const cx = c.width/2, cy = 72, r = 58, inner = 38;
-  const segments = [{v:246,c:'#ff5757'},{v:167,c:'#f0c040'},{v:157,c:'#00e5a0'}];
-  const tot = segments.reduce((s,d)=>s+d.v,0);
-  let angle = -Math.PI/2;
-  ctx.clearRect(0,0,c.width,c.height);
-  segments.forEach(d=>{
-    const slice=(d.v/tot)*Math.PI*2;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,angle,angle+slice);
-    ctx.closePath(); ctx.fillStyle=d.c; ctx.globalAlpha=.85; ctx.fill(); angle+=slice;
-  });
-  ctx.globalAlpha=1;
-  ctx.beginPath(); ctx.arc(cx,cy,inner,0,Math.PI*2); ctx.fillStyle='#0f1318'; ctx.fill();
-  ctx.fillStyle='#dde3ee'; ctx.textAlign='center';
-  ctx.font='bold 15px "Syne",sans-serif'; ctx.fillText('570',cx,cy+5);
-  ctx.fillStyle='#5a6478'; ctx.font='8px "DM Mono",monospace'; ctx.fillText('churns',cx,cy+17);
-}
-
-// ══ CHURN PAGE ══
-function renderComments(){
-  const tags = ['not need now','budget','no results','complicated','auto-renewal','moving platform','project ended','campaigns paused','no longer active','unclear value'];
-  const el = document.getElementById('comment-tags'); if(!el) return;
-  el.innerHTML = tags.map(t=>`<span style="font-size:9px;padding:3px 9px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2)">${t}</span>`).join('');
-  const phrases = [
-    {text:'"No longer needs Snov.io"',n:290,pct:'51%'},
-    {text:'"Not planning to continue"',n:68,pct:'12%'},
-    {text:'"No longer working in sales"',n:45,pct:'8%'},
-    {text:'"Moving to another platform"',n:27,pct:'5%'},
-    {text:'"Budget / high cost"',n:26,pct:'5%'},
-  ];
-  const el2 = document.getElementById('comment-phrases'); if(!el2) return;
-  el2.innerHTML = phrases.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px">
-      <span style="color:var(--muted2);font-style:italic">${p.text}</span>
-      <span style="color:var(--muted)">${p.n}x · ${p.pct}</span>
-    </div>`).join('');
-}
-
-// ══ PLAYBOOKS ══
-function renderPlaybooks(){
-  const grid = document.getElementById('playbook-grid'); if(!grid) return;
-  grid.innerHTML = PLAYBOOKS.map((p,i)=>`
-    <div class="pb-card ${p.done?'done':''}" style="border-top:2px solid ${p.barColor}" onclick="togglePB(${i})">
-      <div class="pb-company">
-        <div class="pb-logo" style="background:${p.color}">${p.logo}</div>
-        <div><div style="font-size:11px;color:var(--text)">${p.company}</div><div class="pb-company-name">${p.tag}</div></div>
-      </div>
-      <div class="pb-title">${p.title}</div>
-      <div class="pb-body">${p.body}</div>
-      <div class="pb-impact">● Impacto estimado: <b>${p.impact}</b></div>
-    </div>`).join('');
-}
-function togglePB(i){ PLAYBOOKS[i].done=!PLAYBOOKS[i].done; renderPlaybooks(); }
-
-// ══ TASKS ══
-function getTasks(){ try{return JSON.parse(localStorage.getItem(TASKS_KEY))||DEFAULT_TASKS;}catch{return DEFAULT_TASKS;} }
-function saveTasks(t){ try{localStorage.setItem(TASKS_KEY,JSON.stringify(t));}catch{} }
-
-function renderTasks(){
-  const tasks = getTasks();
-  const list = document.getElementById('task-list'); if(!list) return;
-  list.innerHTML = tasks.map(t=>`
-    <div class="task-item">
-      <div class="task-check ${t.done?'checked':''}" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
-      <div class="task-body">
-        <div class="task-title ${t.done?'done':''}">${t.title}</div>
-        <div class="task-meta">
-          <span class="task-tag">${t.tag}</span>
-          <span class="task-priority ${t.priority}">${t.priority==='high'?'Alta':t.priority==='medium'?'Média':'Baixa'}</span>
-          <span class="task-source">via ${t.source}</span>
+function render(){
+  updateStats();
+  const l=getFilt();
+  const el=document.getElementById('list');
+  if(!l.length){el.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Nenhum ticket encontrado</div><div class="empty-sub">Adicione um novo ticket acima.</div></div>`;return;}
+  el.innerHTML=l.map(t=>{
+    const d=days(t.createdAt);
+    return `<div class="tc ${t.resolved?'resolved':''}">
+      <div class="tc-chk ${t.resolved?'done':''}" onclick="toggle('${t.id}')">${t.resolved?'✓':''}</div>
+      <div class="tc-body">
+        <div class="tc-top">
+          <span class="tc-id">#${t.id}</span>
+          ${pbadge(t.priority)}
+          <span class="tc-rep">👤 <b>${t.reporter||'—'}</b></span>
+          <span class="tc-date">· ${fmt(t.createdAt)}</span>
+        </div>
+        <div class="tc-title ${t.resolved?'done':''}">${t.title}</div>
+        <div class="tc-links">
+          ${t.taskUrl?`<a class="tc-lnk" href="${t.taskUrl}" target="_blank">🔗 Task</a>`:`<span class="tc-lnk off">🔗 Task</span>`}
+          ${t.chatUrl?`<a class="tc-lnk" href="${t.chatUrl}" target="_blank">💬 Google Chat</a>`:`<span class="tc-lnk off">💬 Chat</span>`}
+          ${t.ticketUrl?`<a class="tc-lnk" href="${t.ticketUrl}" target="_blank">📋 Ticket</a>`:`<span class="tc-lnk off">📋 Ticket</span>`}
+          <span class="tc-lnk" onclick="edit('${t.id}')">✏️ Editar</span>
+          <span class="tc-lnk" onclick="del('${t.id}')" style="color:#dc2626">🗑 Deletar</span>
         </div>
       </div>
-    </div>`).join('');
-  const open=tasks.filter(t=>!t.done).length, done=tasks.filter(t=>t.done).length;
-  const oc=document.getElementById('open-count'), dc=document.getElementById('done-count');
-  if(oc) oc.textContent=open+' abertas';
-  if(dc) dc.textContent=done+' feitas';
-  drawProgressDonut(done,tasks.length);
-  renderPriorityBreakdown(tasks);
+      <div class="tc-right">
+        <span class="sbadge ${t.resolved?'s-done':'s-open'}">${t.resolved?'✓ Resolvido':'● Aberto'}</span>
+        ${dpill(d,t.resolved)}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function toggleTask(id){
-  const tasks=getTasks(), t=tasks.find(x=>x.id===id);
-  if(t) t.done=!t.done;
-  saveTasks(tasks); renderTasks();
+function updateStats(){
+  const open=T.filter(t=>!t.resolved);
+  const res=T.filter(t=>t.resolved);
+  const urg=open.filter(t=>days(t.createdAt)>=7);
+  const avg=open.length?(open.reduce((s,t)=>s+days(t.createdAt),0)/open.length).toFixed(1):'—';
+  document.getElementById('st-total').textContent=T.length;
+  document.getElementById('st-open').textContent=open.length;
+  document.getElementById('st-resolved').textContent=res.length;
+  document.getElementById('st-urgent').textContent=urg.length;
+  document.getElementById('st-avg').textContent=avg;
+  document.getElementById('sb-val').textContent=open.length;
+  document.getElementById('c-all').textContent=T.length;
+  document.getElementById('c-open').textContent=open.length;
+  document.getElementById('c-resolved').textContent=res.length;
+  document.getElementById('c-urgent').textContent=urg.length;
+  ['critical','high','medium','low'].forEach(p=>{document.getElementById('c-'+p).textContent=T.filter(t=>t.priority===p).length;});
 }
 
-function addTask(){
-  const title=document.getElementById('new-task-title')?.value.trim(); if(!title) return;
-  const tasks=getTasks();
-  tasks.unshift({id:Date.now(),title,tag:document.getElementById('new-task-tag').value,priority:document.getElementById('new-task-priority').value,done:false,source:'Manual'});
-  saveTasks(tasks); closeModal();
-  document.getElementById('new-task-title').value='';
-  if(document.getElementById('page-tasks').classList.contains('active')) renderTasks();
+function toggle(id){const t=T.find(x=>x.id===id);if(t){t.resolved=!t.resolved;persist();render();}}
+function del(id){if(!confirm('Deletar este ticket?'))return;T=T.filter(t=>t.id!==id);persist();render();}
+
+function edit(id){
+  const t=T.find(x=>x.id===id);if(!t)return;
+  EID=id;
+  document.getElementById('mtitle').textContent='Editar Ticket';
+  document.getElementById('ft').value=t.title;
+  document.getElementById('fr').value=t.reporter||'';
+  document.getElementById('fp').value=t.priority||'medium';
+  document.getElementById('fu').value=t.taskUrl||'';
+  document.getElementById('fc').value=t.chatUrl||'';
+  document.getElementById('fk').value=t.ticketUrl||'';
+  document.getElementById('modal').classList.add('open');
 }
 
-function drawProgressDonut(done,total){
-  const c=document.getElementById('progressDonut'); if(!c) return;
-  const ctx=c.getContext('2d'), cx=80,cy=80,r=65,inner=46, pct=done/total;
-  ctx.clearRect(0,0,160,160);
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle='#141820'; ctx.fill();
-  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+pct*Math.PI*2); ctx.closePath(); ctx.fillStyle='#00e5a0'; ctx.globalAlpha=.85; ctx.fill();
-  ctx.globalAlpha=1;
-  ctx.beginPath(); ctx.arc(cx,cy,inner,0,Math.PI*2); ctx.fillStyle='#0f1318'; ctx.fill();
-  ctx.fillStyle='#dde3ee'; ctx.textAlign='center';
-  ctx.font='bold 18px "Syne",sans-serif'; ctx.fillText(Math.round(pct*100)+'%',cx,cy+5);
-  ctx.fillStyle='#5a6478'; ctx.font='8px "DM Mono",monospace'; ctx.fillText(done+'/'+total,cx,cy+19);
+function save(){
+  const title=document.getElementById('ft').value.trim();
+  const reporter=document.getElementById('fr').value.trim();
+  if(!title){document.getElementById('ft').focus();return;}
+  if(!reporter){document.getElementById('fr').focus();return;}
+  if(EID){
+    const t=T.find(x=>x.id===EID);
+    if(t){t.title=title;t.reporter=reporter;t.priority=document.getElementById('fp').value;t.taskUrl=document.getElementById('fu').value.trim();t.chatUrl=document.getElementById('fc').value.trim();t.ticketUrl=document.getElementById('fk').value.trim();}
+  } else {
+    T.unshift({id:nid(),title,reporter,priority:document.getElementById('fp').value,taskUrl:document.getElementById('fu').value.trim(),chatUrl:document.getElementById('fc').value.trim(),ticketUrl:document.getElementById('fk').value.trim(),createdAt:new Date().toISOString().split('T')[0],resolved:false});
+  }
+  persist();closeModal();render();
 }
 
-function renderPriorityBreakdown(tasks){
-  const el=document.getElementById('priority-breakdown'); if(!el) return;
-  const h=tasks.filter(t=>t.priority==='high'), m=tasks.filter(t=>t.priority==='medium'), l=tasks.filter(t=>t.priority==='low');
-  const row=(label,items,color)=>`<div class="bar-row"><div class="bar-lbl">${label} (${items.filter(t=>t.done).length}/${items.length})</div><div class="bar-track"><div class="bar-fill" style="width:${items.length?Math.round(items.filter(t=>t.done).length/items.length*100):0}%;background:${color}">${items.filter(t=>t.done).length} feitas</div></div></div>`;
-  el.innerHTML = row('Alta',h,'var(--red)')+row('Média',m,'var(--amber)')+row('Baixa',l,'var(--accent)');
-}
-
-// ══ INSIGHTS ══
-function renderInsights(){
-  const el=document.getElementById('insights-list'); if(!el) return;
-  el.innerHTML=INSIGHTS.map(ins=>`
-    <div class="insight-card ${ins.type}">
-      <div class="insight-header"><span class="insight-icon">${ins.icon}</span><span class="insight-title">${ins.title}</span></div>
-      <div class="insight-body">${ins.body}</div>
-      <div class="insight-cta" onclick="goTo('${ins.cta}')">Ver em detalhes →</div>
-    </div>`).join('');
-}
-
-function goTo(page){
-  const item=document.querySelector('[data-page="'+page+'"]');
-  if(item) item.click();
-}
-
-// ══ MODAL ══
-function showModal(){ document.getElementById('modal').classList.add('open'); }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); }
-document.getElementById('modal').addEventListener('click',e=>{ if(e.target===document.getElementById('modal')) closeModal(); });
-
-// ══ PILLS ══
-function setPill(el){ document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); }
-
-// ══ UPLOAD ══
-function handleUpload(input){
-  const file=input.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const lines=e.target.result.split('\n').filter(l=>l.trim());
-    document.getElementById('upload-status').style.display='block';
-    document.getElementById('upload-msg').textContent=`${lines.length-1} registros carregados de "${file.name}"!`;
-  };
-  reader.readAsText(file);
-}
-const uz=document.getElementById('uploadZone');
-if(uz){
-  uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag');});
-  uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
-  uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f){const inp=document.getElementById('uploadInput');inp.files=e.dataTransfer.files;handleUpload(inp);}});
-}
-
-// ══ EXPORT ══
-function exportData(){
-  const rows=[['Motivo','Quantidade','%'],...Object.entries(DATA.reasons).map(([k,v])=>[k,v,Math.round(v/DATA.total*100)+'%'])];
+function exportCSV(){
+  const rows=[['ID','Título','Reporter','Prioridade','Task','Google Chat','Ticket','Criado em','Dias','Status']];
+  T.forEach(t=>rows.push([t.id,`"${t.title}"`,t.reporter||'',t.priority,t.taskUrl,t.chatUrl,t.ticketUrl,t.createdAt,days(t.createdAt),t.resolved?'Resolvido':'Aberto']));
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));
-  a.download='snovio_churn_analysis.csv'; a.click();
+  a.download='qa-tickets.csv';a.click();
 }
 
-// ══ INIT ══
-window.addEventListener('load',()=>{
-  renderReasonsBars();
-  renderMonthChart();
-  renderPlansBars();
-  drawEngagementDonut();
-  renderComments();
-  renderPlaybooks();
-  renderInsights();
-  renderTasks();
-});
-window.addEventListener('resize', drawEngagementDonut);
-
-const LEADS=[{n:'Ext Snov',e:'ext-snov@oxagile.com',r:'No longer needs Snov.io',p:'M',d:'2026-03-10',o:'3'},{n:'Joycellyn Akuffo',e:'joycellyn.akuffo@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-10',o:'2'},{n:'Cindy Chable',e:'cchable@evidika.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-10',o:'1'},{n:'Thiago Queiroz',e:'contato@advancedehs.com.br',r:'Other',p:'S',d:'2026-03-09',o:'21'},{n:'Sara Mendes',e:'sara@bonuz.it',r:'No longer needs Snov.io',p:'S',d:'2026-03-09',o:'6'},{n:'Vinicius Miguel',e:'viniciusmiguel.mkt@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-09',o:'1'},{n:'Cass Rosas',e:'cass@beomniscient.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-09',o:'1'},{n:'Eric Ziouane',e:'eric@creodot.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-09',o:'5'},{n:'Sergio Stieben',e:'sergiostieben1980@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-03-09',o:'1'},{n:'Maciel Taborda',e:'contato@scopeconsultoria.com.br',r:'Other',p:'S',d:'2026-03-09',o:'2'},{n:'Petr Mares',e:'petr.mares@blueprints.cz',r:'Other',p:'S',d:'2026-03-09',o:'4'},{n:'Sanders Skorik',e:'sanders.dreamvara@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-03-09',o:'7'},{n:'Sebastian Bernardy',e:'s.bernardy@jobs-hub-solutions.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-09',o:'22'},{n:'Amarjit Kumar',e:'amarjit@metricoidtech.com',r:'Not satisfied with the service',p:'S',d:'2026-03-09',o:'2'},{n:'Michael Ratu',e:'michael@saasset.co.uk',r:'Doesn’t like auto-renewals',p:'L',d:'2026-03-09',o:'2'},{n:'Leon Veit',e:'leon.veit@veitselect.de',r:'No longer needs Snov.io',p:'S',d:'2026-03-07',o:'1'},{n:'Ty Chen',e:'bonchen150@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-07',o:'1'},{n:'Omar Abdelhedi',e:'oab@octahaidra.com',r:'Found an alternative',p:'M',d:'2026-03-06',o:'1'},{n:'Tatiana Noce',e:'tatiananoce81@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-03-06',o:'2'},{n:'Sean Johnson',e:'sean@weareagentic.com',r:'Wants to pause',p:'S',d:'2026-03-06',o:'2'},{n:'Mark Wilkes',e:'mark@markwilk.es',r:'No longer needs Snov.io',p:'S',d:'2026-03-06',o:'3'},{n:'Victor Silva',e:'victor@vhsmultimidia.com.br',r:'No longer needs Snov.io',p:'M',d:'2026-03-06',o:'13'},{n:'Aliando LLC',e:'marketing@aliando.com',r:'Other',p:'M',d:'2026-03-06',o:'8'},{n:'Davide Gronchi',e:'dagro@growingpartners.de',r:'Other',p:'S',d:'2026-03-06',o:'3'},{n:'Alexsander Linz',e:'alexsanderlinz1@gmail.com',r:'Other',p:'S',d:'2026-03-06',o:'1'},{n:'Gorp Studios',e:'gorpstudios@outlook.com',r:'Other',p:'S',d:'2026-03-06',o:'1'},{n:'ALEKH VERMA',e:'info@rankspro.io',r:'Other',p:'S',d:'2026-03-06',o:'3'},{n:'Nelson Veloso',e:'marketing.comunicacao@joti.pt',r:'Other',p:'S',d:'2026-03-06',o:'11'},{n:'William Wagner',e:'william.wagner@bigdatalabf.us',r:'No longer needs Snov.io',p:'M',d:'2026-03-06',o:'16'},{n:'Vlad Zee',e:'chuprygin@gmail.com',r:'No longer needs Snov.io',p:'SP3M',d:'2026-03-06',o:'8'},{n:'Peggy Rayzis',e:'peggy@scale.dev',r:'Other',p:'M',d:'2026-03-06',o:'2'},{n:'Michael Moss',e:'michael@aym1.com',r:'Not satisfied with the service',p:'SP3M',d:'2026-03-05',o:'3'},{n:'Sumayyah Patel',e:'sumayyahpatel96@gmail.com',r:'No longer needs Snov.io',p:'SP3M',d:'2026-03-05',o:'2'},{n:'Damien Filiatrault',e:'damien@scalablepath.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-05',o:'25'},{n:'Kevin Mwangi',e:'kevin@joinascend.app',r:'Other',p:'S',d:'2026-03-05',o:'1'},{n:'Donyor Nabiyev',e:'donniegocaps@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-03-05',o:'1'},{n:'Semyon Hrazhdan',e:'semyon.hrazhdan@sembly.ai',r:'No longer needs Snov.io',p:'M',d:'2026-03-05',o:'6'},{n:'Victor Araujo',e:'hello@victornils.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-05',o:'1'},{n:'Michelle Ribeiro',e:'mribeiro@hunterstack.io',r:'Wants to pause',p:'S',d:'2026-03-05',o:'14'},{n:'Mykhailo Sheludko',e:'mykhailo.sheludko@lasoft.org',r:'Wants to pause',p:'M',d:'2026-03-05',o:'27'},{n:'Cleiton Vargas',e:'cleitonvlop2020@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-05',o:'2'},{n:'Aert Huijben',e:'mitchel@jobxpert.nl',r:'Other',p:'SP3M',d:'2026-03-05',o:'9'},{n:'Jay Daunoras',e:'jay@boat.rent',r:'No longer needs Snov.io',p:'S',d:'2026-03-05',o:'9'},{n:'Jai Veeru',e:'hello@jaiveeru.co.in',r:'No longer needs Snov.io',p:'SP3M',d:'2026-03-05',o:'2'},{n:'Chirag Sheth',e:'info@infibrain.com',r:'Wants to pause',p:'S',d:'2026-03-05',o:'1'},{n:'Julian Servatius',e:'julian.servatius@ligadigital.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-05',o:'20'},{n:'He Cheng',e:'info@102go.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-05',o:'4'},{n:'Uchenna Clint',e:'estherherm@hotmail.com',r:'Wants to pause',p:'XL',d:'2026-03-05',o:'3'},{n:'Jack Frost',e:'jackfrostdesign2022@gmail.com',r:'Found an alternative',p:'L',d:'2026-03-04',o:'15'},{n:'Donovan Lashley',e:'donovan@mobiliaconsulting.com',r:'No longer needs Snov.io',p:'M',d:'2026-03-04',o:'1'},{n:'Vip Trading',e:'viptrading.kk@gmail.com',r:'Not satisfied with the service',p:'M',d:'2026-03-04',o:'2'},{n:'Leonel Lima',e:'leonellima@ymail.com',r:'Other',p:'S',d:'2026-03-04',o:'14'},{n:'Sedlmayer ConsultingGmbH',e:'fs@sedlmayer-consulting.com',r:'No longer needs Snov.io',p:'L',d:'2026-03-04',o:'36'},{n:'Ralph Major',e:'ralph@plugit.studio',r:'Not satisfied with the service',p:'S',d:'2026-03-04',o:'2'},{n:'Enrico Tuveri',e:'e.tuveri@lanza.it',r:'No longer needs Snov.io',p:'S',d:'2026-03-04',o:'4'},{n:'Alexander Giolito',e:'agiolito@oxbmgmt.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-03',o:'1'},{n:'Riccardo Dellanna',e:'riccardo@lattepiudigital.it',r:'Not satisfied with the service',p:'M',d:'2026-03-03',o:'2'},{n:'Santi Prats',e:'pasa01ca@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-03',o:'1'},{n:'Toshimi Yoshikawa',e:'healthcareai@sa-ku-ra.jp',r:'No longer needs Snov.io',p:'S',d:'2026-03-03',o:'4'},{n:'Dave Aidekman',e:'dave.aidekman@sureswiftcapital.com',r:'Subscription out of budget',p:'P5K3M',d:'2026-03-02',o:'8'},{n:'Rulehero Team',e:'team@rulehero.net',r:'Wants to pause',p:'S',d:'2026-03-02',o:'4'},{n:'Gislaine Bueno',e:'gislaine.bueno@gmail.com',r:'Wants to pause',p:'M',d:'2026-03-02',o:'25'},{n:'Luciano Silva',e:'lucianoteixeira@tecnoresolve.com',r:'Wants to pause',p:'S',d:'2026-03-02',o:'3'},{n:'Verbai Cloud',e:'agentesiaverbai@gmail.com',r:'Doesn’t like auto-renewals',p:'M',d:'2026-03-02',o:'4'},{n:'Piotr Kwinta',e:'kwinta@harbingers.io',r:'No longer needs Snov.io',p:'S',d:'2026-03-02',o:'1'},{n:'Hasnain Bharmal',e:'hasnainbharmal4@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-03-02',o:'6'},{n:'Giovane Desouza',e:'giovanebackspace@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-03-01',o:'3'},{n:'Fraser Kemp',e:'fraser@leadhook.co',r:'No longer needs Snov.io',p:'S',d:'2026-03-01',o:'3'},{n:'Thomas Jacobus',e:'thomas@bouwcapital.nl',r:'Other',p:'S',d:'2026-03-01',o:'6'},{n:'BENJAMÍN APT',e:'benjaminapt@uc.cl',r:'Wants to pause',p:'S',d:'2026-02-28',o:'7'},{n:'Mohamedmaarouf Almoudane',e:'almoudanemohamedmaarouf@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-28',o:'2'},{n:'Miika H',e:'miikamaestro1@gmail.com',r:'Wants to pause',p:'S',d:'2026-02-27',o:'3'},{n:'Jonas Enderlein',e:'services-accounts@solutiance.com',r:'Found an alternative',p:'L',d:'2026-02-27',o:'1'},{n:'Matthias Ritzenhoff',e:'ritzenhoff@vinta-mittelstand.de',r:'Other',p:'S',d:'2026-02-27',o:'1'},{n:'Robin Tardieu',e:'robin@bilog.fr',r:'No longer needs Snov.io',p:'S',d:'2026-02-27',o:'18'},{n:'Dominic Istha',e:'dominic@techletes.ai',r:'Not satisfied with the service',p:'S',d:'2026-02-26',o:'1'},{n:'Sergii Chyrkov',e:'sergii.chyrkov@a-staff.agency',r:'Found an alternative',p:'M',d:'2026-02-26',o:'29'},{n:'Oliver Barrett',e:'o.barrett@symetrica.com',r:'No longer needs Snov.io',p:'L',d:'2026-02-26',o:'8'},{n:'Bpc Glmkt',e:'partnership@byjuccy.com',r:'Found an alternative',p:'M',d:'2026-02-26',o:'1'},{n:'Caroline Maciel',e:'carol.sig.maciel@gmail.com',r:'Other',p:'S',d:'2026-02-25',o:'10'},{n:'Danilo Oliveira',e:'danilo.oliveira@emy.education',r:'Other',p:'M',d:'2026-02-25',o:'1'},{n:'Lemmoney Serviços',e:'ferrari@lemoney.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-25',o:'22'},{n:'Regro Media',e:'sammy@regromedia.com',r:'Doesn’t like auto-renewals',p:'M',d:'2026-02-25',o:'15'},{n:'Jerzy Król',e:'jerzy.krol@trendy-top.eu',r:'Subscription out of budget',p:'S',d:'2026-02-25',o:'1'},{n:'Awais Haq',e:'awaishaq90@gmail.com',r:'Not satisfied with the service',p:'M',d:'2026-02-25',o:'3'},{n:'Anik Singal',e:'anik@ugenticai.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-25',o:'1'},{n:'Diego Monteiro',e:'diego.monteiro@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-24',o:'1'},{n:'Joakim Persson',e:'knightoperations00@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-24',o:'1'},{n:'Nick Prokopov',e:'nick.prokopov@bponextdoor.org',r:'No longer needs Snov.io',p:'S',d:'2026-02-24',o:'12'},{n:'Andrea Gomes',e:'andrea.gomes@trocapc.com',r:'Wants to pause',p:'M',d:'2026-02-24',o:'7'},{n:'Cyprian Edwardekpo',e:'media@glotadals.us',r:'Not satisfied with the service',p:'L',d:'2026-02-24',o:'1'},{n:'Wesley Carraro',e:'wcarraro@nrocket.online',r:'Subscription out of budget',p:'S',d:'2026-02-24',o:'4'},{n:'Tech Venge',e:'techvenge@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-24',o:'4'},{n:'CallHub Marketing',e:'marketing@callhub.io',r:'No longer needs Snov.io',p:'M',d:'2026-02-24',o:'26'},{n:'Myk Likhov',e:'administrator@wellistweek.com',r:'Not satisfied with the service',p:'M',d:'2026-02-23',o:'2'},{n:'Vani Cosmetics',e:'hello@vanicosmetics.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-23',o:'7'},{n:'Emanuella Simoni',e:'emanuellasimoni@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-23',o:'1'},{n:'Dmitry Leiko',e:'dmitry@ulej.tech',r:'No longer needs Snov.io',p:'S',d:'2026-02-23',o:'34'},{n:'Michele Tedeschi',e:'michele@thestageleftpodcast.com',r:'Other',p:'S',d:'2026-02-23',o:'9'},{n:'Leigh holland',e:'letstalk@lionheartmarketing.co.uk',r:'No longer needs Snov.io',p:'S',d:'2026-02-23',o:'1'},{n:'Namik Icindic',e:'nai@timelog.com',r:'Not satisfied with the service',p:'S',d:'2026-02-23',o:'7'},{n:'Fred Forbes',e:'fred.forbes@monitorservices.co.uk',r:'Wants to pause',p:'S',d:'2026-02-22',o:'3'},{n:'Donnie Meehan',e:'donniemeehan@gmail.com',r:'Not satisfied with the service',p:'M',d:'2026-02-22',o:'2'},{n:'Jose Mayorga',e:'jose@mayfincigars.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-21',o:'1'},{n:'Estruturando Ideias',e:'estruturandoideias@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-21',o:'1'},{n:'Lukasz Kolczynski',e:'lukasz.kolczynski@3e.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-21',o:'21'},{n:'Leadgen Account',e:'leadgen@maxylogic.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-20',o:'4'},{n:'Seth Garff',e:'seth@atlassops.com',r:'Wants to pause',p:'M',d:'2026-02-20',o:'5'},{n:'Blake Miner',e:'blake.miner@shopview.com',r:'Wants to pause',p:'S',d:'2026-02-20',o:'31'},{n:'Bastien RENAULT',e:'brenault@altavantconsulting.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-20',o:'24'},{n:'Matthieu Manitra',e:'matthieu.m@nosytech.fr',r:'No longer needs Snov.io',p:'S',d:'2026-02-20',o:'25'},{n:'Rodrigo Ibrahim',e:'rodrigo.ibrahim@hostfiber.com.br',r:'Not satisfied with the service',p:'S',d:'2026-02-20',o:'7'},{n:'Bartosz Pudelko',e:'kontakt@strategicways.pl',r:'Other',p:'S',d:'2026-02-20',o:'22'},{n:'Artur Shybruk',e:'a.shybruk@work-vision.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-20',o:'22'},{n:'Anastasiia Dolobanko',e:'anastasiia.d@opsworks.co',r:'No longer needs Snov.io',p:'M',d:'2026-02-20',o:'21'},{n:'Hello Gridlines',e:'hello@gridlines.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-19',o:'3'},{n:'Kerrshull Team',e:'kershullteamva@gmail.com',r:'Other',p:'S',d:'2026-02-19',o:'29'},{n:'jackson Shough',e:'jacksonshough@jshoughmarketing.com',r:'Other',p:'S',d:'2026-02-19',o:'8'},{n:'Pete Shimshock',e:'pete@millpondresearch.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-19',o:'1'},{n:'Aigom Lc',e:'adm@aigomlc.com',r:'Not satisfied with the service',p:'S',d:'2026-02-19',o:'4'},{n:'Джек Армстронг',e:'dzekarmstrong@gmail.com',r:'Other',p:'S',d:'2026-02-19',o:'1'},{n:'Matt Stone',e:'matt@st1sports.com',r:'No longer needs Snov.io',p:'SP3M',d:'2026-02-19',o:'2'},{n:'Philip Coolen',e:'sales@one-it.be',r:'Other',p:'S',d:'2026-02-19',o:'3'},{n:'Hello Webrex',e:'hello@webrexstudio.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-19',o:'2'},{n:'August Malinauskas',e:'august@eternis.ai',r:'Other',p:'L',d:'2026-02-18',o:'3'},{n:'Camila Acosta',e:'camila.acosta@juju.com.co',r:'Not satisfied with the service',p:'M',d:'2026-02-18',o:'4'},{n:'Maria Cabral',e:'mluizacabral@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-18',o:'6'},{n:'Mike Sadeghi',e:'mike@kampp.org',r:'No longer needs Snov.io',p:'M',d:'2026-02-18',o:'3'},{n:'David Cooper',e:'dc@foronlinesellers.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-18',o:'6'},{n:'Damiano DallaCosta',e:'damiano.dclav@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-18',o:'3'},{n:'Glu Integrations',e:'integrations@glu.ai',r:'No longer needs Snov.io',p:'S',d:'2026-02-18',o:'2'},{n:'Joe Parker',e:'parkerjr2@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-18',o:'1'},{n:'Jock Edwards',e:'jock.edwards@thesimplifyai.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-18',o:'2'},{n:'Marcus Jeffery',e:'marcus@denverwebsuccess.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-17',o:'4'},{n:'Nayelly Garcia',e:'marketing@fkam.mx',r:'No longer needs Snov.io',p:'S',d:'2026-02-17',o:'8'},{n:'Bruno Hernandes',e:'brunohxcbf@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-02-17',o:'13'},{n:'Ndc Co',e:'ndzandcompany@gmail.com',r:'Wants to pause',p:'S',d:'2026-02-17',o:'1'},{n:'Danielle Morrison',e:'daniellemorrison528@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-17',o:'4'},{n:'Brett Shaw',e:'bashaw30@gmail.com',r:'Wants to switch plan',p:'S',d:'2026-02-17',o:'17'},{n:'Dasun Premadasa',e:'dasun.premadasa@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-16',o:'3'},{n:'Andy Milkowski',e:'andy@imorgon.net',r:'Wants to pause',p:'S',d:'2026-02-16',o:'1'},{n:'Jan Slomczewski',e:'janslomczewski@polished.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-16',o:'12'},{n:'Roman Pykhalov',e:'roman.p@midcontract.com',r:'Wants to pause',p:'S',d:'2026-02-16',o:'7'},{n:'Cybergogo Apps',e:'cybergogoapps@gmail.com',r:'Wants to pause',p:'S',d:'2026-02-16',o:'11'},{n:'Philip Grewin',e:'philip.grewin@diclosepartner.se',r:'No longer needs Snov.io',p:'XL',d:'2026-02-15',o:'20'},{n:'Estevam Schamne',e:'estevam.schamne@taxgroup.com.br',r:'Subscription out of budget',p:'S',d:'2026-02-14',o:'1'},{n:'Raphe Zevenbergen',e:'raphevz@gmail.com',r:'Wants to pause',p:'S',d:'2026-02-14',o:'1'},{n:'Lusi Smith',e:'info@xp-design.co',r:'No longer needs Snov.io',p:'M',d:'2026-02-14',o:'5'},{n:'Liam Jeffery',e:'liam.jeffery@studentventure.io',r:'Subscription out of budget',p:'S',d:'2026-02-14',o:'3'},{n:'Andrea Marqueto',e:'andrea.marqueto@thelever.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-02-13',o:'4'},{n:'Tunahan Gider',e:'tunahan.gider@itproposal.com',r:'Not satisfied with the service',p:'S',d:'2026-02-13',o:'1'},{n:'Juliana Carvalho',e:'juliana.carvalho@niteo.com.br',r:'Other',p:'S',d:'2026-02-13',o:'5'},{n:'Florian Prieur',e:'ellipsebikes@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-13',o:'7'},{n:'Jacob Brezigar',e:'domen@orcabay.io',r:'No longer needs Snov.io',p:'S',d:'2026-02-13',o:'28'},{n:'Dorothee Baumann',e:'marketing@chauffeur-services.com',r:'Not satisfied with the service',p:'M',d:'2026-02-13',o:'5'},{n:'Edwin Pimentel',e:'edwin.pimentel@peruprivate.com',r:'No longer needs Snov.io',p:'SP3M',d:'2026-02-12',o:'2'},{n:'Comercial Datarisk',e:'comercial@datarisk.io',r:'No longer needs Snov.io',p:'S',d:'2026-02-12',o:'36'},{n:'Lorena Ojeda',e:'sales@ustonish.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-12',o:'1'},{n:'Larissa Martins',e:'renato@lado9.com.br',r:'Not satisfied with the service',p:'M',d:'2026-02-12',o:'19'},{n:'Kritika Oberoi',e:'kritika.oberoi@looppanel.com',r:'No longer needs Snov.io',p:'P5K3M',d:'2026-02-12',o:'7'},{n:'José Arnaldo',e:'suporte@ambimet.com.br',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-11',o:'1'},{n:'Katerina Revtova',e:'katerina@creava.agency',r:'No longer needs Snov.io',p:'XS',d:'2026-02-11',o:'9'},{n:'Axe Axe',e:'axe@solmoon.gg',r:'Wants to pause',p:'M',d:'2026-02-11',o:'1'},{n:'Isaac Arboleda',e:'arboledaisaac97@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-11',o:'1'},{n:'Stephen McCarthy',e:'stephenm@ringlatino.net',r:'Doesn’t like auto-renewals',p:'M',d:'2026-02-11',o:'22'},{n:'Filipe Nunes',e:'fmhnunes@yahoo.com.br',r:'Other',p:'S',d:'2026-02-11',o:'11'},{n:'Daniela Morales',e:'stephania.moralesh@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-11',o:'1'},{n:'Coded Pulse',e:'info@codedpulse.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-11',o:'1'},{n:'Juggl Co',e:'info@juggl.co',r:'No longer needs Snov.io',p:'S',d:'2026-02-11',o:'10'},{n:'Ai Dave',e:'dave@aidave.io',r:'No longer needs Snov.io',p:'S',d:'2026-02-11',o:'1'},{n:'Marketing Kenlo',e:'mkt@kenlo.com.br',r:'Other',p:'M',d:'2026-02-10',o:'37'},{n:'Susan Vidal',e:'financeiro@thefools.com.br',r:'Not satisfied with the service',p:'S',d:'2026-02-10',o:'3'},{n:'Gilberto Wonsoski',e:'contato@predprev.com.br',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-10',o:'2'},{n:'Dovile Matulyte',e:'dovile.m@tinggly.com',r:'Found an alternative',p:'S',d:'2026-02-10',o:'22'},{n:'Jan Lugowski',e:'lugowskijan07@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-10',o:'1'},{n:'Jose Soto',e:'josesoto@surfcapadvisors.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-09',o:'1'},{n:'Henrique Garcia',e:'hgarcia@indumed.com.br',r:'Subscription out of budget',p:'M',d:'2026-02-09',o:'9'},{n:'James Lankathilaka',e:'james@turbomind.net',r:'No longer needs Snov.io',p:'S',d:'2026-02-09',o:'3'},{n:'Open Treinamentos',e:'open@opentreinamentos.com.br',r:'Doesn’t like auto-renewals',p:'P5K3M',d:'2026-02-09',o:'2'},{n:'Victoria McMahon',e:'victoria@brandhousestudio.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-09',o:'2'},{n:'Kausa Biz',e:'admin@kausa.biz',r:'Subscription out of budget',p:'M',d:'2026-02-09',o:'2'},{n:'Anoop Prasad',e:'mykartidea@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-09',o:'1'},{n:'Sebastian Frydrych',e:'sebastian.frydrych@webtalk.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-09',o:'24'},{n:'Melissa Piazza',e:'piazzameliss@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-09',o:'2'},{n:'Pascal Marchand',e:'pascalmarch64@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-08',o:'4'},{n:'Al Sh',e:'alex.shresthax@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-08',o:'2'},{n:'Nikola Kondic',e:'frontier1456@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-08',o:'1'},{n:'Bernardo Madsen',e:'bernardomadsen@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-07',o:'5'},{n:'Moysés Iga',e:'moysesiga@grwvertical.co',r:'No longer needs Snov.io',p:'S',d:'2026-02-07',o:'5'},{n:'Daniel Govea',e:'daniel@lasysco.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-06',o:'6'},{n:'steven orozco',e:'steven.orozco@invictasolutionsgroup.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-06',o:'18'},{n:'Dariia Redko',e:'dariiaredko@tophire.eu',r:'Found an alternative',p:'M',d:'2026-02-06',o:'13'},{n:'Kenny Jola',e:'restaurantgrowthweb@outlook.com',r:'Subscription out of budget',p:'S',d:'2026-02-06',o:'1'},{n:'Eli Kimche',e:'eli@elikimche.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-06',o:'9'},{n:'Ty Emerson',e:'tyemerson792@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-06',o:'1'},{n:'Kamila Królikowska',e:'kamila.krolikowska@walterherz.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'8'},{n:'Clive Kimari',e:'clive@selectflowconsulting.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'1'},{n:'Hristo Atanasov',e:'niko@amvisible.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'12'},{n:'Marketing Team',e:'marketing_team@confiant.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'23'},{n:'Ayrat Nizami',e:'webinsighter25@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'4'},{n:'Seb Lear',e:'seblear13@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'2'},{n:'Elsa Avendano',e:'elsaavendan0128@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'12'},{n:'Grupa Infinity',e:'kom1@agencja-gi.pl',r:'Wants to pause',p:'S',d:'2026-02-05',o:'24'},{n:'Leandro Azevedo',e:'leandro@setteone.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'1'},{n:'Kuba Krupski',e:'kuba.krupski@aklima.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'19'},{n:'Andras Anderla',e:'andras.anderla@panonit.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-05',o:'3'},{n:'Worke Company',e:'contactworke@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'6'},{n:'Data Account',e:'data@alphageeksllc.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-05',o:'2'},{n:'Aliaksei Papou',e:'alexey.papou@wowcube.com',r:'Other',p:'S',d:'2026-02-05',o:'3'},{n:'Marcos Almirante',e:'almirante@stormeducation.com.br',r:'Wants to pause',p:'SP3M',d:'2026-02-04',o:'1'},{n:'Julián Cruz',e:'julian@mosaico.media',r:'Subscription out of budget',p:'S',d:'2026-02-04',o:'1'},{n:'Ebubeker Rexha',e:'ebubekerrexha@subdivide.co',r:'No longer needs Snov.io',p:'S',d:'2026-02-04',o:'1'},{n:'Rupesh Chhetry',e:'nightingalecare.marketing@gmail.com',r:'Found an alternative',p:'S',d:'2026-02-04',o:'1'},{n:'Rafal Kaminski',e:'aiteamspro@gmail.com',r:'Other',p:'S',d:'2026-02-04',o:'9'},{n:'Andrew Furlong',e:'andrew.furlong@reodigital.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-04',o:'7'},{n:'ZENITH ORION',e:'hollymarieburns@outlook.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-04',o:'8'},{n:'Sean Markey',e:'sean@jnpr.org',r:'Subscription out of budget',p:'S',d:'2026-02-04',o:'23'},{n:'broCode Technology',e:'brocodetechsolutions@gmail.com',r:'No longer needs Snov.io',p:'SP3M',d:'2026-02-03',o:'2'},{n:'Ariane Americo',e:'ariane@brangemedia.com',r:'Other',p:'M',d:'2026-02-03',o:'1'},{n:'Allysson Raia',e:'allysson@vaiforrest.com.br',r:'Not satisfied with the service',p:'S',d:'2026-02-03',o:'22'},{n:'Ryszard Podoba',e:'office@vrls.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-03',o:'13'},{n:'Nicolas Petot',e:'nicolas@ucasa.fr',r:'No longer needs Snov.io',p:'S',d:'2026-02-03',o:'5'},{n:'Aneta Zakaszewska',e:'a.zakaszewska@getprintbox.com',r:'Found an alternative',p:'M',d:'2026-02-03',o:'6'},{n:'Buddy Dobinson',e:'buddy@ozka.co.uk',r:'Found an alternative',p:'S',d:'2026-02-03',o:'1'},{n:'Rocio Kejaya',e:'rocio.k@powerenergy.cl',r:'No longer needs Snov.io',p:'S',d:'2026-02-02',o:'5'},{n:'Christopher Gee',e:'chris@rixxo.com',r:'Found an alternative',p:'M',d:'2026-02-02',o:'1'},{n:'Justyna Koczor',e:'ksiegowosc@vss.com.pl',r:'No longer needs Snov.io',p:'S',d:'2026-02-02',o:'3'},{n:'Novmax Novmax',e:'novmaxmarketing@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-02',o:'1'},{n:'Eris Cuevas',e:'aiestatemind@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-02',o:'3'},{n:'Jamal Madrane',e:'madranejamaleddine@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-02',o:'1'},{n:'Elizabeth Gaer',e:'elizabeth@orotaxadvisors.com',r:'Not satisfied with the service',p:'S',d:'2026-02-02',o:'1'},{n:'Yevhenii Ananchenko',e:'jack@stellar-soft.com',r:'Other',p:'M',d:'2026-02-02',o:'24'},{n:'Vladlens Kecko',e:'kecko.vladlen@gmail.com',r:'Wants to pause',p:'M',d:'2026-02-02',o:'14'},{n:'Jeremy Barnett',e:'jeremy.barnett@planitree.com',r:'Wants to switch plan',p:'XL',d:'2026-02-02',o:'14'},{n:'Milin P',e:'milin@educationprofits.com',r:'Subscription out of budget',p:'S',d:'2026-02-01',o:'1'},{n:'Abhishek Saini',e:'abhi72red@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-01',o:'1'},{n:'Cerise Event',e:'hello@ceriseevent.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-31',o:'1'},{n:'Bob Massie',e:'bob.massie@marketinginformatics.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-30',o:'2'},{n:'Tania Patel',e:'tania@agency8corporate.com',r:'Other',p:'SP3M',d:'2026-01-30',o:'1'},{n:'Joey Stoddard',e:'joey@horizonsai.co',r:'No longer needs Snov.io',p:'S',d:'2026-01-29',o:'1'},{n:'Julio Escamilla',e:'julio@jceseo.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-29',o:'13'},{n:'Gowtham M',e:'gowtham.m@spendflo.com',r:'Wants to pause',p:'M',d:'2026-01-29',o:'9'},{n:'Zoe Schaeffer',e:'zoe.schaeffer@eebel.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-29',o:'8'},{n:'Alex Sema',e:'alex@briarwoodsearch.com',r:'Not satisfied with the service',p:'M',d:'2026-01-29',o:'1'},{n:'Thiago Furlani',e:'furlani@zetacontroles.com.br',r:'Other',p:'S',d:'2026-01-29',o:'11'},{n:'Sourabh Mishra',e:'sourabhmishra9211@gmail.com',r:'Other',p:'S',d:'2026-01-29',o:'1'},{n:'Sakshith Koluguri',e:'simplexai.78@gmail.com',r:'No longer needs Snov.io',p:'XS',d:'2026-01-29',o:'2'},{n:'Mary Corseletes',e:'jllemary@gmail.com',r:'Not satisfied with the service',p:'SP3M',d:'2026-01-28',o:'4'},{n:'Lukas Goetz',e:'lukessbusiness@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-28',o:'1'},{n:'CARLOS VAZ',e:'carlosvazjr8@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-28',o:'9'},{n:'Erhan Coskun',e:'erhancoskunxd@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-28',o:'2'},{n:'Marketing Homeswap',e:'marketing@homeswap.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-28',o:'8'},{n:'Filipe Campos',e:'filipe@scoder.com.br',r:'Wants to pause',p:'S',d:'2026-01-27',o:'5'},{n:'Gian Leonardo',e:'gian@helgen.bio',r:'No longer needs Snov.io',p:'SP3M',d:'2026-01-27',o:'1'},{n:'Michail Rybakov',e:'michail@claroanalytics.com',r:'No longer needs Snov.io',p:'P5K3M',d:'2026-01-27',o:'1'},{n:'Elizabeth Sydorenko',e:'elizabeth7all7stuff@gmail.com',r:'Wants to pause',p:'M',d:'2026-01-27',o:'7'},{n:'Nick Wallman',e:'nick@payrolltaxpro.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'7'},{n:'Lisa Mohapatra',e:'lisa@bidblox.ai',r:'Wants to pause',p:'SP6M',d:'2026-01-26',o:'1'},{n:'Maria Ramos',e:'maria.ramos@rotachrom.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'5'},{n:'Brian Molina',e:'bmolina@impulse.ky',r:'No longer needs Snov.io',p:'M',d:'2026-01-26',o:'9'},{n:'Anastasia Bibikova',e:'ana.bibikova@zenphi.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'19'},{n:'Linde Oldehampsink',e:'linde@brickbase.nl',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'1'},{n:'Adam Kirk',e:'adam@minsterseo.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'13'},{n:'Tim Venison',e:'tim@clarityinsightsgroup.com',r:'Not satisfied with the service',p:'S',d:'2026-01-26',o:'3'},{n:'Sam Carter',e:'s.charlescarter@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-25',o:'10'},{n:'Mohamed Niang',e:'sduo6606@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-24',o:'2'},{n:'Vlad Selitbovskyi',e:'vlad@kma.tech',r:'No longer needs Snov.io',p:'S',d:'2026-01-24',o:'42'},{n:'Mohammed Almadani',e:'mohammedelmad6493@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-24',o:'1'},{n:'FrankJim Oesterwind',e:'info@multiplied-network.com',r:'Wants to pause',p:'S',d:'2026-01-24',o:'4'},{n:'Umar Cader',e:'tipimedias@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-24',o:'3'},{n:'Gabriele Trapani',e:'gabrieletrapani@renoon.com',r:'Wants to pause',p:'M',d:'2026-01-23',o:'44'},{n:'Profit Lab',e:'thehiddenprofitlab@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-23',o:'1'},{n:'Dayane Ohira',e:'dayaneohira@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-01-22',o:'5'},{n:'Marcus Jones',e:'atlfitnesssolutions@gmail.com',r:'Other',p:'S',d:'2026-01-22',o:'30'},{n:'Zawadi Bushoki',e:'zawadi@yogupay.com',r:'Doesn’t like auto-renewals',p:'M',d:'2026-01-22',o:'8'},{n:'Administration Berexiadigital',e:'administration@berexiadigital.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-22',o:'5'},{n:'Filipa Pereira',e:'suporte@triplow.pt',r:'Wants to pause',p:'M',d:'2026-01-22',o:'3'},{n:'Branislav Saloky',e:'brano@netsearch.com.au',r:'No longer needs Snov.io',p:'S',d:'2026-01-22',o:'19'},{n:'Alana Lemann',e:'alanalemann@edwriting.com',r:'Wants to pause',p:'SP3M',d:'2026-01-22',o:'2'},{n:'Rockland Appelgate',e:'rocklandappelgate@rjapublishing.com',r:'Other',p:'S',d:'2026-01-22',o:'21'},{n:'Karim Adib',e:'keaadib@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-21',o:'5'},{n:'Leon Missoul',e:'leon@luniq.io',r:'Not satisfied with the service',p:'S',d:'2026-01-21',o:'2'},{n:'Dyamac Ltd',e:'dyamacltd@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-01-21',o:'1'},{n:'Ruben Bilbulyan',e:'ruben.bilbulyan@saynine.ai',r:'No longer needs Snov.io',p:'M',d:'2026-01-21',o:'8'},{n:'Axel Lindgren',e:'axel.lindgren501@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-21',o:'25'},{n:'Angus StClair',e:'angus@gymfactory.com.au',r:'No longer needs Snov.io',p:'S',d:'2026-01-21',o:'10'},{n:'Syed Imtiyaz',e:'syed.imtiyaz@smartwinnr.com',r:'Not satisfied with the service',p:'M',d:'2026-01-21',o:'2'},{n:'Arjun Gayam',e:'arjun@rebel-labs.ai',r:'No longer needs Snov.io',p:'L',d:'2026-01-21',o:'3'},{n:'Robert Rackley',e:'support@expresstext.net',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'2'},{n:'João Oliveira',e:'contato@cafeapui.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'14'},{n:'Gabriel Onutu',e:'gabi@zeti-media.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'6'},{n:'Rodrigo Chernhak',e:'rodrigoeu360@gmail.com',r:'Found an alternative',p:'S',d:'2026-01-20',o:'16'},{n:'Felipe Scupino',e:'fesb2709@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-01-20',o:'3'},{n:'Fabio Lima',e:'fabio@fegsegurogarantia.com.br',r:'Not satisfied with the service',p:'M',d:'2026-01-20',o:'4'},{n:'Jorge Jimenez',e:'jorge@conectamos.mx',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'8'},{n:'Bryan Guin',e:'bryan@avallon.ai',r:'Not satisfied with the service',p:'M',d:'2026-01-20',o:'2'},{n:'Acq Fi',e:'manager@acqfi.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'6'},{n:'Angus Adams',e:'viktor.l@globalledger.io',r:'No longer needs Snov.io',p:'M',d:'2026-01-20',o:'10'},{n:'Shane Harper',e:'limitlesscoachltd@gmail.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-20',o:'5'},{n:'Nupur Patel',e:'nupur@arkaequity.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-20',o:'19'},{n:'Adam Omar',e:'5starnursingagency@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-19',o:'1'},{n:'Ana Santos',e:'ana.santos@contasimples.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-19',o:'8'},{n:'Ethan Curtis',e:'ethan.curtis@h3o.biz',r:'No longer needs Snov.io',p:'S',d:'2026-01-19',o:'3'},{n:'Armin Lohbauer',e:'alohbauer@btlaw.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-01-19',o:'21'},{n:'RADWAN MALLAH',e:'adamducan2007@gmail.com',r:'No longer needs Snov.io',p:'XXL',d:'2026-01-18',o:'19'},{n:'Lola Shonaike',e:'contact.soffun@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-18',o:'8'},{n:'Marketing Fatto',e:'marketing@fatto.ind.br',r:'No longer needs Snov.io',p:'M',d:'2026-01-16',o:'12'},{n:'Simon Nuss',e:'nuss@certigreen.de',r:'Other',p:'S',d:'2026-01-16',o:'1'},{n:'Ana Gaborovic',e:'ana.gaborovic@global-engineering-technologies.com',r:'Wants to pause',p:'S',d:'2026-01-16',o:'28'},{n:'Vitória Silva',e:'vitoria.silva@qualyteam.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-01-16',o:'31'},{n:'Matt Harrington',e:'matthew@syngage.ai',r:'Subscription out of budget',p:'M',d:'2026-01-16',o:'16'},{n:'Jacob Kravitz',e:'sales@truckerguide.app',r:'No longer needs Snov.io',p:'M',d:'2026-01-16',o:'31'},{n:'Agencja Adsventure',e:'ads@adsventure.pl',r:'No longer needs Snov.io',p:'S',d:'2026-01-16',o:'33'},{n:'Massimiliano Paolucci',e:'paolucciadvisory@gmail.com',r:'Wants to pause',p:'M',d:'2026-01-16',o:'16'},{n:'志文 许',e:'346020834qq@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-16',o:'2'},{n:'Paul VanMetre',e:'paulvanmetre@seatapp.org',r:'No longer needs Snov.io',p:'S',d:'2026-01-16',o:'6'},{n:'Josep Sauri',e:'josep.sauri.portet@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'1'},{n:'Rudolfs Kaucis',e:'kaucisr@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-01-15',o:'7'},{n:'Ben Taylor',e:'ben@btaylorconsultingcom.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'3'},{n:'Seja Vacivitta',e:'sejavacivitta@vacivitta.com.br',r:'Subscription out of budget',p:'S',d:'2026-01-15',o:'1'},{n:'Affiliates CBDAffs',e:'info@affsmedia.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'18'},{n:'Simon Snelling',e:'management@search-sciences.com',r:'Wants to pause',p:'M',d:'2026-01-15',o:'3'},{n:'Alexis Woods',e:'alexis@tacticalbeastagency.com',r:'Not satisfied with the service',p:'S',d:'2026-01-15',o:'1'},{n:'Teodora Drazovic',e:'teodora.drazovic@global-engineering-technologies.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'32'},{n:'Matteo Cuellar',e:'matteo@wfot.org',r:'Found an alternative',p:'S',d:'2026-01-15',o:'7'},{n:'Martynas Sadauskas',e:'info@izotop.de',r:'No longer needs Snov.io',p:'M',d:'2026-01-15',o:'15'},{n:'Nick Ray',e:'intrinsictones@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'2'},{n:'Marcio Villanova',e:'marcio@ecobraz.org.br',r:'No longer needs Snov.io',p:'L',d:'2026-01-14',o:'16'},{n:'Gage Gailloux',e:'gagegailloux@gmail.com',r:'Other',p:'S',d:'2026-01-14',o:'2'},{n:'Digitais Pelomundo',e:'digitaispelomundo@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-14',o:'4'},{n:'Maciej ECLIS',e:'kontakt@eclis.pl',r:'Other',p:'S',d:'2026-01-14',o:'14'},{n:'AutoID Polska',e:'systemy@autoid.pl',r:'No longer needs Snov.io',p:'S',d:'2026-01-14',o:'9'},{n:'Loic Sb',e:'loic@trusk.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-14',o:'2'},{n:'María Sánchez',e:'woodsearchdesarrollo@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-14',o:'3'},{n:'Jean Seide',e:'jean@rothwealthholdings.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-01-14',o:'3'},{n:'Federico Sanna',e:'info@thesilkroadunion.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-13',o:'3'},{n:'john loranger',e:'drjohnloranger@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2026-01-13',o:'2'},{n:'Dominika Guzik',e:'dominika.guzik@rndleasing.pl',r:'No longer needs Snov.io',p:'S',d:'2026-01-13',o:'6'},{n:'Nino Judge',e:'nino.judge@flypop.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-13',o:'1'},{n:'Kyrok Accounts',e:'accounts@kyrok.com',r:'No longer needs Snov.io',p:'L',d:'2026-01-13',o:'3'},{n:'Kirill Sulemenkov',e:'it@crezu.net',r:'No longer needs Snov.io',p:'S',d:'2026-01-13',o:'13'},{n:'Neural Admin',e:'admin@neuralsquad.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-13',o:'13'},{n:'Natalia Sopina',e:'nsopina@atlantic-link.com.ua',r:'Wants to pause',p:'S',d:'2026-01-13',o:'3'},{n:'Nanilethu Zimba',e:'nanilethuzimba@gmail.com',r:'Wants to pause',p:'S',d:'2026-01-12',o:'1'},{n:'Spike Carter',e:'spike@freight-easy.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-12',o:'5'},{n:'Deepak Soni',e:'info@syncloop.com',r:'Other',p:'M',d:'2026-01-12',o:'1'},{n:'Jasper Willems',e:'jasper@certificates.dev',r:'Wants to pause',p:'S',d:'2026-01-12',o:'2'},{n:'Nelson Vega',e:'nelson@kleiotechnology.com',r:'Other',p:'S',d:'2026-01-12',o:'2'},{n:'Vick Parry',e:'vick@hype-robotics.co.uk',r:'No longer needs Snov.io',p:'S',d:'2026-01-12',o:'5'},{n:'UAWC Agency',e:'bizdev@uawc.agency',r:'Subscription out of budget',p:'S',d:'2026-01-12',o:'8'},{n:'Mariana Woodley',e:'marianawoodley@optimarremote.com',r:'Not satisfied with the service',p:'M',d:'2026-01-12',o:'2'},{n:'Piotr Wasilewski',e:'contact@pwaplumbingandheating.co.uk',r:'No longer needs Snov.io',p:'S',d:'2026-01-12',o:'4'},{n:'Salman Anwar',e:'salman@creativegrowthlab.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-11',o:'13'},{n:'Andre Syversen',e:'andre.syversen@superiagroup.com',r:'Not satisfied with the service',p:'S',d:'2026-01-11',o:'1'},{n:'Thomas Deely',e:'thomas@knowledgegraph.tech',r:'Other',p:'S',d:'2026-01-11',o:'9'},{n:'Rhys Mckay',e:'rhys@luminaweb3.io',r:'Doesn’t like auto-renewals',p:'M',d:'2026-01-10',o:'8'},{n:'Actyc Devs',e:'actycdevs@gmail.com',r:'Wants to pause',p:'S',d:'2026-01-10',o:'28'},{n:'Steve Zebrowski',e:'steve@wearestageone.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-10',o:'5'},{n:'JoAnn Perez',e:'mayra@mcliff.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-09',o:'19'},{n:'Chunks Media',e:'chunksmedia@aol.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-09',o:'10'},{n:'Davids Klavins',e:'hello@roicave.com',r:'Wants to pause',p:'M',d:'2026-01-09',o:'15'},{n:'Ivy Ji',e:'jilinyi1995@gmail.com',r:'Found an alternative',p:'L',d:'2026-01-09',o:'6'},{n:'Tomasz Stelmach',e:'tomaszstelmach@qualityisland.pl',r:'Found an alternative',p:'M',d:'2026-01-09',o:'9'},{n:'Suleman Shoaib',e:'qishaltd@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-08',o:'2'},{n:'Fanaura Ai',e:'support@fanaura.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-08',o:'8'},{n:'Comercial PLSS',e:'comercial@plss.com.br',r:'No longer needs Snov.io',p:'P5K3M',d:'2026-01-08',o:'5'},{n:'Dmytro Moskaliuk',e:'dmytro.moskaliuk@odoo-art.com',r:'Wants to pause',p:'S',d:'2026-01-08',o:'2'},{n:'Vella Crew',e:'vellacrewmedia@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-08',o:'2'},{n:'Fantech Sales',e:'sales@fantechlabs.io',r:'No longer needs Snov.io',p:'S',d:'2026-01-08',o:'2'},{n:'Kimberly Lain',e:'kimberly@finopsadvisory.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-07',o:'10'},{n:'Shakil Ahmed',e:'info@merilsoft.com',r:'Subscription out of budget',p:'M',d:'2026-01-07',o:'1'},{n:'Валерій Міхадюк',e:'accountv@bigtraff.com',r:'Other',p:'M',d:'2026-01-07',o:'3'},{n:'Mirsad Mustovic',e:'mirsad@leadmap.properties',r:'No longer needs Snov.io',p:'S',d:'2026-01-07',o:'2'},{n:'Liam Kay',e:'liam@theagencynova.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-07',o:'4'},{n:'Talent Desk',e:'taas@n53tech.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'1'},{n:'La Tina',e:'manola@la-tina.co',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'11'},{n:'Kara Fagan',e:'kara@simplywise.com',r:'Found an alternative',p:'S',d:'2026-01-06',o:'1'},{n:'Socialy Rise',e:'team@socialyrise.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'3'},{n:'ADN Agency',e:'geral@adnagency.pt',r:'No longer needs Snov.io',p:'M',d:'2026-01-06',o:'5'},{n:'Baran Debbag',e:'baran@p4.com.tr',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'2'},{n:'Amit Kakkar',e:'amit@growthner.com',r:'Wants to pause',p:'S',d:'2026-01-06',o:'4'},{n:'EOS INTERNATIONAL',e:'eosintnl@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'1'},{n:'Willi Terry',e:'williamterry99@outlook.com',r:'Other',p:'S',d:'2026-01-06',o:'1'},{n:'Austin Mcculloh',e:'awmcculloh@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-06',o:'1'},{n:'Aaron Greene',e:'agreene@glazierclinics.com',r:'Not satisfied with the service',p:'M',d:'2026-01-05',o:'9'},{n:'Federico Oyhamburu',e:'federico@cuatroenero.com',r:'Other',p:'M',d:'2026-01-05',o:'10'},{n:'goPLIMS Team',e:'contact@plimso.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-05',o:'7'},{n:'Michel Zetun',e:'mitch@diwohub.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-05',o:'4'},{n:'Alexandre Fontaine',e:'alexandre@af-design.studio',r:'Other',p:'S',d:'2026-01-05',o:'2'},{n:'Admin Super',e:'admin@lightwork.blue',r:'Other',p:'M',d:'2026-01-05',o:'2'},{n:'Kaival Patel',e:'sales.devkrest@zohomail.in',r:'Not satisfied with the service',p:'S',d:'2026-01-05',o:'2'},{n:'John Shoaf',e:'john@indyturnoverpros.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-04',o:'3'},{n:'Jakir Ali',e:'gentlemansfade@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-01-04',o:'4'},{n:'Fatima Abbas',e:'sarah@scfasolutions.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-02',o:'1'},{n:'Thomas Schiefer',e:'thomas.schiefer@placement.services',r:'No longer needs Snov.io',p:'M',d:'2026-01-02',o:'13'},{n:'Andrii Davydov',e:'andreykture@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-01',o:'2'},{n:'Chris Woodley',e:'chrisw@coworkandcountry.co.uk',r:'No longer needs Snov.io',p:'M',d:'2026-01-01',o:'5'},{n:'Ranganath Nadella',e:'nr@urcash.pro',r:'Other',p:'M',d:'2025-12-31',o:'4'},{n:'Vivek Rawat',e:'vivekrawat3152@gmail.com',r:'Not satisfied with the service',p:'S',d:'2025-12-31',o:'3'},{n:'Pedro Lupo',e:'pedro.lupo@globalcscorp.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'29'},{n:'Andre Nazzi',e:'andre@telesolut.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'8'},{n:'WMD PARTICIPACOES',e:'aline.andriole@kainosco.com.br',r:'No longer needs Snov.io',p:'M',d:'2025-12-30',o:'31'},{n:'Chad Cook',e:'ccook@bpt3.net',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'1'},{n:'Ángeles Advice',e:'citasytramites08@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'17'},{n:'Kassio Dias',e:'contato@inteligencianacaixa.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-29',o:'1'},{n:'Murilo Rangel',e:'murilo@mwiter.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-29',o:'31'},{n:'Marketing XoMedia',e:'marketing@xomedia.pl',r:'No longer needs Snov.io',p:'S',d:'2025-12-29',o:'16'},{n:'Adam Tal',e:'kanskyholdings@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-29',o:'14'},{n:'Eren Canbaz',e:'erencanbaz@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-29',o:'5'},{n:'Itai Bigiaoui',e:'itai@bo-nobo.com',r:'Other',p:'S',d:'2025-12-29',o:'11'},{n:'Oliver Cordingley',e:'oliver@ourgen.co.uk',r:'Wants to pause',p:'S',d:'2025-12-29',o:'5'},{n:'Sunnii PeiferStafford',e:'sunnii@buildingatlas.io',r:'No longer needs Snov.io',p:'S',d:'2025-12-28',o:'12'},{n:'Sumit kumar',e:'ranga.sumit1999@gmail.com',r:'Other',p:'S',d:'2025-12-28',o:'2'},{n:'Carlos Mejia',e:'market.sp01@hqts.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-28',o:'9'},{n:'Alexander Jimenez',e:'alex@ixmedia.biz',r:'No longer needs Snov.io',p:'S',d:'2025-12-27',o:'1'},{n:'Liliia Shevtsova',e:'liliia@plazus.com',r:'Found an alternative',p:'S',d:'2025-12-27',o:'1'},{n:'Godstime Efon',e:'efon@steinnlabs.com',r:'Doesn’t like auto-renewals',p:'M',d:'2025-12-26',o:'1'},{n:'Arnoldas Blinkevicius',e:'admin@tape.eu',r:'No longer needs Snov.io',p:'M',d:'2025-12-25',o:'10'},{n:'Allpros Trabelsi',e:'admin@allpros.io',r:'No longer needs Snov.io',p:'S',d:'2025-12-25',o:'1'},{n:'Praveen Karapakula',e:'praveen.karapakula@shipconsoleinfo.com',r:'Found an alternative',p:'L',d:'2025-12-24',o:'3'},{n:'Tanya Dubrovina',e:'b2b@mentoly.com.ua',r:'No longer needs Snov.io',p:'S',d:'2025-12-24',o:'9'},{n:'Eric Charron',e:'sales@ariapack.ca',r:'Found an alternative',p:'S',d:'2025-12-23',o:'1'},{n:'Mohammad S',e:'digital@shirazicorp.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-23',o:'2'},{n:'Alexandre Santos',e:'alexandre@vamboracoders.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-23',o:'8'},{n:'Kevin Ruiz',e:'hola@n1mensajeria.com',r:'Not satisfied with the service',p:'S',d:'2025-12-23',o:'2'},{n:'Lorena Mielcioiu',e:'m.lorena@entreprenation.ro',r:'No longer needs Snov.io',p:'S',d:'2025-12-23',o:'3'},{n:'Affiliate Vault',e:'hello@contact.affiliategrowthvault.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-23',o:'3'},{n:'Kingdom Cleans',e:'support@kingdomcleans.com',r:'Wants to pause',p:'M',d:'2025-12-22',o:'8'},{n:'Kristina Vukoje',e:'kristina@tablz.com',r:'Wants to pause',p:'S',d:'2025-12-22',o:'5'},{n:'Thiago Pocobi',e:'thiago.pocobi@malibuinvest.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-22',o:'7'},{n:'Zilvinas Stumbras',e:'zstumbras@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-22',o:'6'},{n:'Natalia Prysiazhniuk',e:'natalia.p@qubstudio.com',r:'No longer needs Snov.io',p:'M',d:'2025-12-22',o:'10'},{n:'Dariia Yakovleva',e:'partners@solomono.net',r:'Wants to pause',p:'L',d:'2025-12-22',o:'8'},{n:'Dmitry Dobrov',e:'dobrovd@jetoctopus.com',r:'No longer needs Snov.io',p:'SP3M',d:'2025-12-21',o:'1'},{n:'Anna Plocha',e:'kontakt@mindstation.pl',r:'Not satisfied with the service',p:'M',d:'2025-12-20',o:'5'},{n:'Gulu Mammadli',e:'mammadov.qulu@gmail.com',r:'Found an alternative',p:'S',d:'2025-12-20',o:'3'},{n:'Shiva Jogu',e:'shiva@brandovaamedia.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-20',o:'2'},{n:'Rachel Halverson',e:'gotcelloskills@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-20',o:'14'},{n:'Kevin Royson',e:'kevinnnrysn@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-20',o:'1'},{n:'Mason Dupree',e:'odigoleadsllc@gmail.com',r:'Wants to pause',p:'M',d:'2025-12-19',o:'3'},{n:'FOWND INC',e:'dm@fownd.org',r:'Subscription out of budget',p:'S',d:'2025-12-19',o:'7'},{n:'Abigail Booth',e:'booth.abij@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-19',o:'7'},{n:'Rodrigo Lima',e:'rodrigo.lima@labbo.com.br',r:'Not satisfied with the service',p:'M',d:'2025-12-19',o:'4'},{n:'Diego Rodriguez',e:'diego@afrus.org',r:'Subscription out of budget',p:'L',d:'2025-12-19',o:'5'},{n:'Bruna Zucchi',e:'zucchimarketing@gmail.com',r:'Wants to pause',p:'S',d:'2025-12-19',o:'1'},{n:'Chris Wade',e:'chris@jimcolemanltd.com',r:'Subscription out of budget',p:'S',d:'2025-12-18',o:'2'},{n:'Laura Klumbis',e:'lklumbis@aiohealthpro.com',r:'Wants to pause',p:'S',d:'2025-12-18',o:'1'},{n:'David Corona',e:'dcorona@artzgm.com',r:'No longer needs Snov.io',p:'M',d:'2025-12-18',o:'3'},{n:'Arkadiusz Perz',e:'aperz@taxcoach.pl',r:'Other',p:'M',d:'2025-12-18',o:'5'},{n:'lucas aguera',e:'lucasaguera@gmail.com',r:'Subscription out of budget',p:'S',d:'2025-12-17',o:'3'},{n:'Brent Rojas',e:'brent@bydrec.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-17',o:'9'},{n:'Ahmed Kadry',e:'a.kadry@global-travel-partners.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-17',o:'17'},{n:'Theodor Tonca',e:'theo@theodorandco.com',r:'Wants to pause',p:'S',d:'2025-12-17',o:'1'},{n:'TechQuarter Team',e:'sales@techquarter.io',r:'Not satisfied with the service',p:'P20K6M',d:'2025-12-17',o:'7'},{n:'Vlad Timaru',e:'tech@dmdcrown.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-17',o:'5'},{n:'Muhammad Afnan',e:'team@thebil.co',r:'Other',p:'S',d:'2025-12-17',o:'2'},{n:'Jaroslaw Podraza',e:'office@got-transport.co.uk',r:'No longer needs Snov.io',p:'S',d:'2025-12-17',o:'2'},{n:'Hlbina Team',e:'ahoj@hlbina.sk',r:'No longer needs Snov.io',p:'S',d:'2025-12-17',o:'4'},{n:'Maryam Danesh',e:'mdanesh@indeed.com',r:'No longer needs Snov.io',p:'L',d:'2025-12-17',o:'9'},{n:'ROMMEL MONTGOMERY',e:'monica@roymo.es',r:'No longer needs Snov.io',p:'L',d:'2025-12-17',o:'21'},{n:'Ryan Garratt',e:'garrattryan2@gmail.com',r:'Not satisfied with the service',p:'S',d:'2025-12-17',o:'1'},{n:'Dennis Arasheben',e:'info@jiapersonalcare.com',r:'Wants to pause',p:'S',d:'2025-12-16',o:'1'},{n:'Logan Cassidy',e:'logan@fbojets.com',r:'Found an alternative',p:'S',d:'2025-12-16',o:'1'},{n:'Khurram Ali',e:'alik216@yahoo.com',r:'Wants to pause',p:'L',d:'2025-12-16',o:'2'},{n:'Leo Strang',e:'leo@fcmusicgroup.com',r:'Wants to pause',p:'S',d:'2025-12-16',o:'3'},{n:'Steve Angelo',e:'steve@optiwork.ai',r:'Other',p:'S',d:'2025-12-16',o:'5'},{n:'Iryna Babii',e:'iryna-mariia.babii@holywater.tech',r:'No longer needs Snov.io',p:'S',d:'2025-12-16',o:'27'},{n:'AnaRibeiro Ribeiro',e:'ana@osteriaditutti.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-16',o:'11'},{n:'Cedric LeGuerson',e:'cedric@sportandmusic.co.uk',r:'Other',p:'S',d:'2025-12-16',o:'7'},{n:'Viktoriia Khomutovska',e:'viktoriia.khomutovska@posperita.pl',r:'Found an alternative',p:'M',d:'2025-12-16',o:'12'},{n:'Daniel Spence',e:'daniel-spence@live.co.uk',r:'Other',p:'XL',d:'2025-12-16',o:'22'},{n:'Natascha Bergamo',e:'nnbergamo@gmail.com',r:'Other',p:'S',d:'2025-12-15',o:'3'},{n:'Rajvir Adiwal',e:'rajviradiwal09@gmail.com',r:'Wants to pause',p:'S',d:'2025-12-15',o:'1'},{n:'Cristina Gomez',e:'cristina.gomez@exte.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-15',o:'2'},{n:'Renan Castilho',e:'renan@moodi.vc',r:'No longer needs Snov.io',p:'S',d:'2025-12-15',o:'5'},{n:'Wilzer Jeanbaptiste',e:'aiaidelly@gmail.com',r:'Not satisfied with the service',p:'M',d:'2025-12-15',o:'2'},{n:'Hoshin Cho',e:'hoshin.cho@toss.im',r:'No longer needs Snov.io',p:'M',d:'2025-12-15',o:'3'},{n:'Sharon Sara',e:'contact@trivionex.in',r:'Other',p:'S',d:'2025-12-15',o:'2'},{n:'Devon Gethers',e:'devon@meridianventures.co',r:'Not satisfied with the service',p:'L',d:'2025-12-12',o:'14'},{n:'Lauren BaldwinHernandez',e:'lauren@feel-ur-best.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-12',o:'1'},{n:'Seunghyun Kim',e:'shkim@userband.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-12',o:'1'},{n:'Irfan Butt',e:'hulkentps@gmail.com',r:'Other',p:'S',d:'2025-12-12',o:'2'},{n:'Peter Forest',e:'secureitsales@secure-it.co.uk',r:'Wants to pause',p:'M',d:'2025-12-12',o:'11'},{n:'Ferramentas Ciclo',e:'ferramentas@ciclopartners.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-12',o:'20'},{n:'Wojciech Gizowski',e:'wojciech.gizowski@iteo.com',r:'Not satisfied with the service',p:'S',d:'2025-12-12',o:'24'},{n:'Michael Cruz',e:'mike@youvouch.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-12',o:'21'},{n:'Gabriel Boone',e:'gabriel.c.boone@gmail.com',r:'Wants to pause',p:'S',d:'2025-12-11',o:'17'},{n:'michael nusinkis',e:'mike@bedscrunchie.com',r:'Wants to pause',p:'S',d:'2025-12-11',o:'4'},{n:'Tamires Goncalves',e:'tamires.goncalves@provafacilnaweb.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-11',o:'32'},{n:'Vitória Campos',e:'comercial@addit.com.br',r:'Found an alternative',p:'M',d:'2025-12-11',o:'21'},{n:'Wercon Contabilidade',e:'contato@wercon.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-11',o:'18'},{n:'Tetiana Tretiak',e:'tetyanatretyak85@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-11',o:'1'},{n:'Roy Perlson',e:'royp@melingo.com',r:'Other',p:'S',d:'2025-12-11',o:'5'},{n:'COASEAN GOODHILL',e:'info@coasean.com',r:'Wants to pause',p:'M',d:'2025-12-11',o:'6'},{n:'Rlr Advogados',e:'rlr.advocacia@gmail.com',r:'Doesn’t like auto-renewals',p:'S',d:'2025-12-10',o:'2'},{n:'Marcio Provenzano',e:'marcio@novacapitalsa.com.br',r:'No longer needs Snov.io',p:'M',d:'2025-12-10',o:'8'},{n:'Omar Hajib',e:'omar@roofersontop.com',r:'Not satisfied with the service',p:'L',d:'2025-12-09',o:'2'},{n:'Arash Amini',e:'amini@goodroads.io',r:'No longer needs Snov.io',p:'XL',d:'2025-12-09',o:'8'},{n:'Val Tarnavska',e:'userforpayments3@snov.io',r:'Other',p:'S',d:'2025-12-09',o:'2'},{n:'Adrian Stoina',e:'marketingallpromo@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-09',o:'1'},{n:'Karyna Malkova',e:'karina.malkova@uitop.design',r:'No longer needs Snov.io',p:'S',d:'2026-03-10',o:'9'},{n:'GeoInova',e:'devops@geoinova.com.br',r:'Other',p:'L',d:'2026-03-06',o:'14'},{n:'Sean Irabor',e:'sean@netflydigital.com',r:'Wants to pause',p:'M',d:'2026-03-06',o:'33'},{n:'RMP Polska',e:'pozycjonowanie.rmp@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-06',o:'48'},{n:'Cyrus Chamlou',e:'cyrusghiaic@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-06',o:'20'},{n:'B Grant',e:'b.southafrica@gmail.com',r:'Subscription out of budget',p:'S',d:'2026-03-05',o:'3'},{n:'Vladimir Diakonov',e:'vladimir.d@itdelight.com',r:'Other',p:'S',d:'2026-03-05',o:'40'},{n:'Jeroen Cloosterman',e:'jeroen@yellowlab.nl',r:'Doesn’t like auto-renewals',p:'S',d:'2026-03-03',o:'4'},{n:'Cyber Security',e:'info@cybersecurityawards.com',r:'Wants to pause',p:'M',d:'2026-03-02',o:'5'},{n:'Lisa Akselrod',e:'lis.minae@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-03-01',o:'6'},{n:'Olusegun Akinfenwa',e:'segunakinfenwa@gmail.com',r:'Wants to pause',p:'S',d:'2026-02-27',o:'1'},{n:'X EE',e:'xuee@angsel.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-25',o:'45'},{n:'Kayla West',e:'kmwest342@live.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-24',o:'7'},{n:'Michael Baldwin',e:'mbaldwin@burlingtoncp.us',r:'No longer needs Snov.io',p:'S',d:'2026-02-24',o:'50'},{n:'Levi Melo',e:'levi.melo@advresources.com.br',r:'Other',p:'S',d:'2026-02-23',o:'32'},{n:'Tom Judge',e:'tom@deliverycircle.com',r:'Subscription out of budget',p:'S',d:'2026-02-23',o:'23'},{n:'Dejan Levaja',e:'dejan.levaja@ras-it.rs',r:'No longer needs Snov.io',p:'S',d:'2026-02-20',o:'5'},{n:'Karen Vieira',e:'drkarenv@gmail.com',r:'Not satisfied with the service',p:'S',d:'2026-02-16',o:'56'},{n:'Michael Liu',e:'michael@boostcamp.app',r:'No longer needs Snov.io',p:'M',d:'2026-02-13',o:'11'},{n:'Vineet Gupta',e:'vineet@2xsas.com',r:'Other',p:'S',d:'2026-02-12',o:'4'},{n:'Malik A',e:'zindacanada@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-11',o:'4'},{n:'Clive Keyte',e:'clivekeyte@intrafocus.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-11',o:'23'},{n:'Enrique Contreras',e:'enrique@digital1to1.com',r:'No longer needs Snov.io',p:'M',d:'2026-02-11',o:'81'},{n:'Valerian Gegidze',e:'info@gegidze.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-11',o:'67'},{n:'Comercial Sults',e:'comercial@sults.com.br',r:'Doesn’t like auto-renewals',p:'S',d:'2026-02-10',o:'11'},{n:'Smash Digital',e:'marketing@smashdigital.com',r:'No longer needs Snov.io',p:'S',d:'2026-02-10',o:'41'},{n:'Konstantin Alshami',e:'konstantin@bluedrop.at',r:'No longer needs Snov.io',p:'S',d:'2026-02-06',o:'40'},{n:'Юлія Комарницька',e:'yuliya.komarnytska@netpeakrecruit.com',r:'Wants to pause',p:'S',d:'2026-02-05',o:'6'},{n:'Wanderson Oliveira',e:'comtax@comtax.com.br',r:'Other',p:'M',d:'2026-02-04',o:'26'},{n:'Gisele Santos',e:'joaogoncalves@nfeagro.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-02-04',o:'3'},{n:'clicOH clicOH',e:'carolina@clicoh.com',r:'Wants to pause',p:'M',d:'2026-01-29',o:'23'},{n:'ANGELO SPITTI',e:'angelo@aseq.com.br',r:'Wants to pause',p:'SP3M',d:'2026-01-28',o:'2'},{n:'shneur pershin',e:'sean@businesscapitalllc.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-27',o:'5'},{n:'Davide Dabramo',e:'davide@fratelli.agency',r:'No longer needs Snov.io',p:'S',d:'2026-01-27',o:'68'},{n:'Matt Krieger',e:'matt@k-analytics.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'17'},{n:'Vendas uCondo',e:'vendas@ucondo.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-01-26',o:'36'},{n:'Oleh Pylyp',e:'oleh.pylyp@inveritasoft.com',r:'Wants to pause',p:'M',d:'2026-01-25',o:'2'},{n:'Gunnar Jung',e:'jung.gunnar@live.de',r:'No longer needs Snov.io',p:'S',d:'2026-01-25',o:'33'},{n:'Charlie Monk',e:'hello@moliussocial.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-25',o:'15'},{n:'Emil Silic',e:'nisamemil@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-23',o:'2'},{n:'Lucas Bonatto',e:'lucas@autogestor.net',r:'No longer needs Snov.io',p:'S',d:'2026-01-21',o:'7'},{n:'Walter Koehler',e:'walter.koehler@breakcoffeeco.com',r:'Found an alternative',p:'S',d:'2026-01-16',o:'23'},{n:'Denis DALMASSO',e:'contact@denisdalmasso.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-15',o:'50'},{n:'Alyssa Bush',e:'alyssa@ironpropertysvc.com',r:'Found an alternative',p:'M',d:'2026-01-13',o:'36'},{n:'Jessica Taglia',e:'jessica@eatcrayons.com',r:'No longer needs Snov.io',p:'M',d:'2026-01-13',o:'46'},{n:'Enio Ciappa',e:'eniociappa@gmail.com',r:'Other',p:'S',d:'2026-01-13',o:'12'},{n:'Jorge Fagundo',e:'jorge@inmperson.es',r:'Other',p:'S',d:'2026-01-12',o:'13'},{n:'Julian von',e:'julian@42cap.com',r:'Other',p:'M',d:'2026-01-12',o:'54'},{n:'Josemiguel lopezgomez',e:'chiyodagomez@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2026-01-09',o:'21'},{n:'Sandra Sinicco',e:'camila@grupocasa.com.br',r:'No longer needs Snov.io',p:'S',d:'2026-01-08',o:'67'},{n:'R',e:'russell@russfern.com',r:'Not satisfied with the service',p:'S',d:'2026-01-08',o:'6'},{n:'Ali  Warraich',e:'ali@carbonteq.com',r:'No longer needs Snov.io',p:'P20K3M',d:'2026-01-08',o:'6'},{n:'Orixa Media',e:'kevin.chanyoufee@feedcast.io',r:'Other',p:'M',d:'2026-01-08',o:'37'},{n:'Josh Zukerman',e:'josh@rapidreach.me',r:'Wants to pause',p:'S',d:'2026-01-06',o:'1'},{n:'Shaquille Jones',e:'shaquille@clientbasemedia.co.uk',r:'Found an alternative',p:'S',d:'2026-01-05',o:'5'},{n:'Tanya Rusanova',e:'tanya.rusanova@doitrelocation.com',r:'Wants to pause',p:'L',d:'2026-01-05',o:'52'},{n:'Jermaine Malcolm',e:'jjspl27@gmail.com',r:'Wants to switch plan',p:'S',d:'2025-12-30',o:'4'},{n:'CUBED',e:'hello@cubedbd.com',r:'Wants to pause',p:'S',d:'2025-12-30',o:'60'},{n:'Guy Makmel',e:'guy@clinicminds.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'23'},{n:'DosAlCubo NewBusiness',e:'new-business@dosalcubo.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-30',o:'17'},{n:'Marcos Ferreira',e:'marcosferreira@mobcontent.com.br',r:'Other',p:'S',d:'2025-12-29',o:'9'},{n:'abhishek',e:'abhishek@designnbuy.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-26',o:'26'},{n:'Swapnil Devre',e:'swapnildevre50@gmail.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-19',o:'21'},{n:'Taras Bilous',e:'taras.bilous@adwise.guru',r:'No longer needs Snov.io',p:'S',d:'2025-12-18',o:'9'},{n:'Rinse Gijsman',e:'rinse@wearesawa.com',r:'Wants to pause',p:'S',d:'2025-12-18',o:'9'},{n:'Benjamin mareschal',e:'benjamindecharentenay@gmail.com',r:'Found an alternative',p:'L',d:'2025-12-16',o:'27'},{n:'Leonardo Ribeiro',e:'ribeiro@hazelrisk.com',r:'No longer needs Snov.io',p:'S',d:'2025-12-12',o:'11'},{n:'Lucas Fonseca',e:'lucas.fonseca@glassesstg.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-11',o:'7'},{n:'Peter Czernecki',e:'andi.kasler@10xone.com',r:'No longer needs Snov.io',p:'M',d:'2025-12-11',o:'15'},{n:'Ivan Machado',e:'ivan@digitalair.com.br',r:'No longer needs Snov.io',p:'S',d:'2025-12-10',o:'38'}];
-
-function planLabel(p){
-  const m={S:'Starter S',M:'Pro M',L:'Pro L',XL:'Pro XL',XXL:'Pro XXL',XS:'Starter XS',SP3M:'Pro 3M',SP6M:'Pro 6M',P5K3M:'Pro 5K 3M',P20K3M:'Pro 20K 3M',P20K6M:'Pro 20K 6M'};
-  return m[p]||p;
+function openModal(){
+  EID=null;
+  document.getElementById('mtitle').textContent='Novo Ticket';
+  ['ft','fr','fu','fc','fk'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fp').value='medium';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('ft').focus(),100);
 }
-
-function reasonBadge(r){
-  if(r.includes('No longer'))   return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(255,87,87,0.12);color:#ff5757;border:1px solid rgba(255,87,87,0.2);">Não precisa mais</span>';
-  if(r.includes('satisfied'))   return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(255,87,87,0.12);color:#ff5757;border:1px solid rgba(255,87,87,0.2);">Insatisfeito</span>';
-  if(r.includes('alternative')) return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(240,192,64,0.12);color:#f0c040;border:1px solid rgba(240,192,64,0.2);">Alternativa</span>';
-  if(r.includes('budget'))      return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(240,192,64,0.12);color:#f0c040;border:1px solid rgba(240,192,64,0.2);">Budget</span>';
-  if(r.includes('pause'))       return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(91,143,255,0.12);color:#5b8fff;border:1px solid rgba(91,143,255,0.2);">Quer pausar</span>';
-  if(r.includes('renewal'))     return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(0,229,160,0.1);color:#00e5a0;border:1px solid rgba(0,229,160,0.15);">Auto-renewal</span>';
-  return '<span style="font-size:9px;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,0.04);color:#555;border:1px solid rgba(255,255,255,0.07);">Outro</span>';
-}
-
-function filterLeads(){
-  const q=(document.getElementById('lead-search')||{value:''}).value.toLowerCase();
-  const reason=(document.getElementById('lead-reason')||{value:''}).value;
-  const plan=(document.getElementById('lead-plan')||{value:''}).value;
-  const filtered=LEADS.filter(l=>
-    (!q||(l.n.toLowerCase().includes(q)||l.e.toLowerCase().includes(q)))&&
-    (!reason||l.r===reason)&&
-    (!plan||l.p===plan)
-  );
-  const tbody=document.getElementById('leads-tbody');
-  if(!tbody) return;
-  document.getElementById('lead-count').textContent=filtered.length+' leads';
-  if(!filtered.length){
-    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">nenhum lead encontrado</td></tr>';
-    return;
-  }
-  tbody.innerHTML=filtered.map(l=>`
-    <tr>
-      <td style="font-weight:600;color:var(--text)">${l.n||'—'}</td>
-      <td style="font-size:11px;color:var(--muted2)">${l.e}</td>
-      <td style="font-size:11px;color:var(--muted2)">${planLabel(l.p)}</td>
-      <td>${reasonBadge(l.r)}</td>
-      <td style="text-align:center;font-weight:700;color:var(--text)">${l.o}</td>
-      <td style="font-size:10px;color:var(--muted);white-space:nowrap">${l.d}</td>
-    </tr>`).join('');
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelectorAll('.nav-item').forEach(item=>{
-    if(item.dataset.page==='churn') item.addEventListener('click',()=>setTimeout(filterLeads,80));
-  });
-  setTimeout(filterLeads,400);
+function closeModal(){document.getElementById('modal').classList.remove('open');EID=null;}
+function ho(e){if(e.target===document.getElementById('modal'))closeModal();}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openModal();}
 });
 
+load();render();
 </script>
 </body>
 </html>
