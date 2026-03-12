@@ -6,7 +6,7 @@
 
 ## 🔗 Acesso
 
-**[maaialucas.github.io/qa-tracker](https://maaialucas.github.io/qa-tracker)**
+**[https://maaialucas.github.io/snovio-qa-tracker/](https://maaialucas.github.io/snovio-qa-tracker/)**
 
 ---
 
